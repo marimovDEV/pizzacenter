@@ -40,7 +40,10 @@ ALLOWED_HOSTS = [
     'tokyo-eight-mu.vercel.app',
     'pizzacentergarden.uz',
     'api.pizzacentergarden.uz',
-    'www.pizzacentergarden.uz'
+    'www.pizzacentergarden.uz',
+    'tokyokafe.uz',
+    'api.tokyokafe.uz',
+    'www.tokyokafe.uz'
 ]
 
 
@@ -205,6 +208,9 @@ CORS_ALLOWED_ORIGINS = [
     "https://pizzacentergarden.uz",
     "https://www.pizzacentergarden.uz",
     "https://api.pizzacentergarden.uz",
+    "https://tokyokafe.uz",
+    "https://www.tokyokafe.uz",
+    "https://api.tokyokafe.uz",
 ]
 
 # Vercel preview URLlarni qo'llab-quvvatlash uchun
@@ -278,6 +284,9 @@ CSRF_TRUSTED_ORIGINS = [
     "https://pizzacentergarden.uz",
     "https://www.pizzacentergarden.uz",
     "https://api.pizzacentergarden.uz",
+    "https://tokyokafe.uz",
+    "https://www.tokyokafe.uz",
+    "https://api.tokyokafe.uz",
 ]
 
 # Django Unfold Configuration
