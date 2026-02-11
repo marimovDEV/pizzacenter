@@ -29,7 +29,19 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-your-secret-key-here'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '192.168.1.11', 'api.pizzacentr.uz', 'pizzacentr.uz', 'www.pizzacentr.uz', 'tokyo-eight-mu.vercel.app']
+ALLOWED_HOSTS = [
+    'localhost', 
+    '127.0.0.1', 
+    '0.0.0.0', 
+    '192.168.1.11', 
+    'api.pizzacentr.uz', 
+    'pizzacentr.uz', 
+    'www.pizzacentr.uz', 
+    'tokyo-eight-mu.vercel.app',
+    'pizzacentergarden.uz',
+    'api.pizzacentergarden.uz',
+    'www.pizzacentergarden.uz'
+]
 
 
 # Application definition
@@ -190,6 +202,9 @@ CORS_ALLOWED_ORIGINS = [
     "https://tokyo-eight-mu.vercel.app",
     "https://tokyo-git-main-marimovdevs-projects.vercel.app",
     "https://tokyo-marimovdevs-projects.vercel.app",
+    "https://pizzacentergarden.uz",
+    "https://www.pizzacentergarden.uz",
+    "https://api.pizzacentergarden.uz",
 ]
 
 # Vercel preview URLlarni qo'llab-quvvatlash uchun
@@ -260,6 +275,9 @@ CSRF_TRUSTED_ORIGINS = [
     "https://api.pizzacentr.uz",
     "https://tokyo-eight-mu.vercel.app",
     "https://*.vercel.app",
+    "https://pizzacentergarden.uz",
+    "https://www.pizzacentergarden.uz",
+    "https://api.pizzacentergarden.uz",
 ]
 
 # Django Unfold Configuration
