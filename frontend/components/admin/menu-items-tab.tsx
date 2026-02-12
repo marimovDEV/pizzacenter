@@ -42,13 +42,15 @@ const MenuItemCard = memo(({
   adminCategories,
   deletingItemId,
   onEdit,
-  onDelete
+  onDelete,
+  onStatusToggle
 }: {
   item: MenuItem
   adminCategories: any[]
   deletingItemId?: string | null
   onEdit?: (item: MenuItem) => void
   onDelete?: (item: MenuItem) => void
+  onStatusToggle?: (item: MenuItem, isActive: boolean) => void
 }) => {
   const categoryId = item.category
   const category = adminCategories?.find((cat) => cat.id === categoryId)
@@ -63,7 +65,8 @@ const MenuItemCard = memo(({
     <div
       className={cn(
         "bg-white/10 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/20 shadow-xl transition-opacity group relative",
-        String(deletingItemId) === String(item.id) && 'opacity-50'
+        String(deletingItemId) === String(item.id) && 'opacity-50',
+        !item.is_active && 'grayscale-[0.5] opacity-80'
       )}
     >
       <div className="relative h-40 sm:h-48">
@@ -72,7 +75,11 @@ const MenuItemCard = memo(({
 
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1">
-          {item.is_active && <span className="px-2 py-1 rounded-md bg-green-500/90 text-white text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm shadow-sm">Faol</span>}
+          {item.is_active ? (
+            <span className="px-2 py-1 rounded-md bg-green-500/90 text-white text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm shadow-sm">Faol</span>
+          ) : (
+            <span className="px-2 py-1 rounded-md bg-slate-500/90 text-white text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm shadow-sm">Faol emas</span>
+          )}
           {!item.available && <span className="px-2 py-1 rounded-md bg-red-500/90 text-white text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm shadow-sm">Mavjud emas</span>}
         </div>
 
@@ -113,26 +120,37 @@ const MenuItemCard = memo(({
             <span className="text-emerald-400 font-bold text-lg">{formatPrice(item.price || 0)}</span>
           </div>
 
-          {onEdit && onDelete && (
-            <div className="flex gap-1">
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => onEdit(item)}
-                className="h-8 w-8 rounded-full bg-white/5 hover:bg-blue-500/20 text-blue-400 p-0"
-              >
-                <Pencil className="w-4 h-4" />
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => onDelete(item)}
-                className="h-8 w-8 rounded-full bg-white/5 hover:bg-red-500/20 text-red-400 p-0"
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
-            </div>
-          )}
+          <div className="flex items-center gap-3">
+            {onStatusToggle && (
+              <div className="flex items-center gap-2">
+                <Switch
+                  checked={item.is_active}
+                  onCheckedChange={(checked) => onStatusToggle(item, checked)}
+                  className="scale-75 data-[state=checked]:bg-emerald-500"
+                />
+              </div>
+            )}
+            {onEdit && onDelete && (
+              <div className="flex gap-1 border-l border-white/10 pl-2">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => onEdit(item)}
+                  className="h-8 w-8 rounded-full bg-white/5 hover:bg-blue-500/20 text-blue-400 p-0"
+                >
+                  <Pencil className="w-4 h-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => onDelete(item)}
+                  className="h-8 w-8 rounded-full bg-white/5 hover:bg-red-500/20 text-red-400 p-0"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -320,6 +338,17 @@ export function MenuItemsTab() {
   const handleDeleteClick = (item: MenuItem) => {
     setItemToDelete(item)
     setDeleteDialogOpen(true)
+  }
+
+  const handleToggleActive = async (item: MenuItem, isActive: boolean) => {
+    try {
+      await api.patch(`/menu-items/${item.id}/`, { is_active: isActive })
+      await refetchMenuItems()
+      toast.success(isActive ? "Taom faollashtirildi" : "Taom o'chirib qo'yildi")
+    } catch (error) {
+      console.error('Error toggling menu item status:', error)
+      toast.error("Holatni o'zgartirishda xatolik")
+    }
   }
 
   const handleDeleteConfirm = async () => {
@@ -657,6 +686,7 @@ export function MenuItemsTab() {
             deletingItemId={String(deletingItemId)}
             onEdit={handleEdit}
             onDelete={handleDeleteClick}
+            onStatusToggle={handleToggleActive}
           />
         ))}
       </div>
