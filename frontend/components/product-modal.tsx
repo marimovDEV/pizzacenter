@@ -23,6 +23,20 @@ export function ProductModal({ item, isOpen, onClose, language }: ProductModalPr
     const cartItem = cart.find((ci) => ci.menuItem.id === item.id)
     const cartQuantity = cartItem?.quantity || 0
 
+    // Scroll Lock Logic
+    useEffect(() => {
+        if (isOpen && item) {
+            // Store original overflow
+            const originalStyle = window.getComputedStyle(document.body).overflow
+            // Prevent scroll
+            document.body.style.overflow = "hidden"
+            // Clean up
+            return () => {
+                document.body.style.overflow = originalStyle
+            }
+        }
+    }, [isOpen, item])
+
     const getName = () => {
         if (language === "uz") return item.name_uz
         if (language === "ru") return item.name_ru
@@ -56,12 +70,12 @@ export function ProductModal({ item, isOpen, onClose, language }: ProductModalPr
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-4 bg-black/80 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-0 md:p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
             <div
-                className="absolute inset-0"
+                className="absolute inset-0 bg-slate-950/40"
                 onClick={onClose}
             />
-            <div className="relative bg-slate-900 md:bg-gradient-to-b md:from-slate-900 md:via-slate-800 md:to-slate-900 rounded-t-3xl md:rounded-3xl overflow-hidden border-t md:border border-white/20 shadow-2xl max-w-lg w-full max-h-[92vh] flex flex-col mt-auto md:mt-0">
+            <div className="relative bg-slate-900 md:bg-gradient-to-b md:from-slate-900 md:via-slate-800 md:to-slate-900 rounded-t-3xl md:rounded-3xl overflow-hidden border-t md:border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)] max-w-lg w-full max-h-[92vh] flex flex-col mt-auto md:mt-0 animate-in zoom-in-95 slide-in-from-bottom-10 duration-300 ease-out">
                 {/* Close Button - More accessible on mobile */}
                 <button
                     onClick={onClose}
@@ -190,7 +204,7 @@ export function ProductModal({ item, isOpen, onClose, language }: ProductModalPr
                         </div>
                     )}
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
