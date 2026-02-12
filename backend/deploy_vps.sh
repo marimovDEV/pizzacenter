@@ -50,6 +50,47 @@ if [ -d "/root/tokyo" ]; then
     fi
 
     source "/root/tokyo/venv/bin/activate"
+    
+    # Fix Tokyo settings.py for CORS and ALLOWED_HOSTS
+    echo "🔧 Fixing Tokyo settings.py..."
+    python3 - <<EOF
+import os
+
+def fix_settings(path):
+    if not os.path.exists(path): return
+    with open(path, 'r') as f: content = f.read()
+    
+    # Add domains to ALLOWED_HOSTS if not present
+    domains = ["'tokyokafe.uz'", "'api.tokyokafe.uz'", "'www.tokyokafe.uz'"]
+    if "ALLOWED_HOSTS" in content:
+        for d in domains:
+            if d not in content:
+                content = content.replace("ALLOWED_HOSTS = [", f"ALLOWED_HOSTS = [\n    {d},")
+    
+    # Add domains to CORS_ALLOWED_ORIGINS
+    origins = ["'https://tokyokafe.uz'", "'https://www.tokyokafe.uz'", "'https://api.tokyokafe.uz'"]
+    if "CORS_ALLOWED_ORIGINS" in content:
+        for o in origins:
+            if o not in content:
+                content = content.replace("CORS_ALLOWED_ORIGINS = [", f"CORS_ALLOWED_ORIGINS = [\n    {o},")
+    else:
+        # If CORS_ALLOWED_ORIGINS doesn't exist, append it
+        content += "\nCORS_ALLOWED_ORIGINS = [\n" + ",\n".join(origins) + "\n]\n"
+
+    # Add domains to CSRF_TRUSTED_ORIGINS
+    if "CSRF_TRUSTED_ORIGINS" in content:
+        for o in origins:
+            if o not in content:
+                content = content.replace("CSRF_TRUSTED_ORIGINS = [", f"CSRF_TRUSTED_ORIGINS = [\n    {o},")
+    
+    with open(path, 'w') as f: f.write(content)
+
+# Search for settings.py in TOKYO_ROOT
+for root, dirs, files in os.walk("$TOKYO_ROOT"):
+    if "settings.py" in files:
+        fix_settings(os.path.join(root, "settings.py"))
+EOF
+
     if [ -f "$TOKYO_ROOT/requirements.txt" ]; then
         pip install -r "$TOKYO_ROOT/requirements.txt"
     fi

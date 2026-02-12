@@ -254,8 +254,8 @@ CACHE_MIDDLEWARE_KEY_PREFIX = ''
 
 # Performance settings
 CONN_MAX_AGE = 60  # Database connection pooling
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB max upload size
-FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB max file size
+DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB max upload size
+FILE_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB max file size
 
 # CSRF settings
 CSRF_COOKIE_HTTPONLY = False  # Allow JavaScript access to CSRF token
