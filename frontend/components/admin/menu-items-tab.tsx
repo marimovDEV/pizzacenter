@@ -426,7 +426,7 @@ export function MenuItemsTab() {
     })
 
     return filtered
-  }, [menuItems, debouncedQuery, selectedCategory])
+  }, [menuItems, debouncedQuery, selectedCategory, statusFilter])
 
   const { currentPage, totalPages, paginatedItems, nextPage, prevPage, hasNextPage, hasPrevPage } = usePagination(filteredAndSortedItems, 20)
 
