@@ -3,7 +3,7 @@
 import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
 import type { Category, MenuItem, Promotion } from "./types"
-import { useCategories, useAdminMenuItems, usePromotions } from "@/hooks/use-api"
+import { useCategories, useAdminMenuItems, useMenuItems, usePromotions } from "@/hooks/use-api"
 
 interface MenuContextType {
   categories: Category[]
