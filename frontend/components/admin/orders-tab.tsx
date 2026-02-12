@@ -198,7 +198,7 @@ export function OrdersTab() {
                                 <div className="flex items-center gap-4">
                                     <div className="text-right hidden sm:block">
                                         <p className="text-emerald-400 font-black">{formatPrice(order.total)}</p>
-                                        <p className="text-[10px] text-white/40">{order.items.length} xil mahsulot</p>
+                                        <p className="text-[10px] text-white/40">{order.items?.length || 0} xil mahsulot</p>
                                     </div>
 
                                     <div className={cn(
@@ -264,7 +264,7 @@ export function OrdersTab() {
                                 <div className="space-y-3">
                                     <h4 className="text-sm font-bold text-white/80">Mahsulotlar ro'yxati</h4>
                                     <div className="space-y-2">
-                                        {selectedOrder.items.map((item) => (
+                                        {selectedOrder.items?.map((item) => (
                                             <div key={item.id} className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5">
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-sm">
@@ -319,6 +319,6 @@ export function OrdersTab() {
                     )}
                 </DialogContent>
             </Dialog>
-        </div>
+        </div >
     )
 }

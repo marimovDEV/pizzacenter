@@ -13,7 +13,8 @@ import {
     Calendar,
     AlertCircle,
     Loader2,
-    Filter
+    Filter,
+    Phone
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -85,11 +86,11 @@ export function ReviewsTab() {
                 <TabsList className="bg-white/5 border border-white/10 p-1 rounded-xl mb-6">
                     <TabsTrigger value="reviews" className="rounded-lg data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
                         <Star className="w-4 h-4 mr-2" />
-                        Mijoz Izohlari ({reviews.filter(r => !r.approved).length} yangi)
+                        Mijoz Izohlari ({(reviews || []).filter(r => !r.approved).length} yangi)
                     </TabsTrigger>
                     <TabsTrigger value="feedback" className="rounded-lg data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
                         <MessageSquare className="w-4 h-4 mr-2" />
-                        Fikr-mulohazalar ({feedback.filter(f => !f.is_read).length} yangi)
+                        Fikr-mulohazalar ({(feedback || []).filter(f => !f.is_read).length} yangi)
                     </TabsTrigger>
                 </TabsList>
 
