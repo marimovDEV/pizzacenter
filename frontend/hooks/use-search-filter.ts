@@ -18,7 +18,8 @@ export function useSearchFilter(delay: number = 300) {
     return () => clearTimeout(timer)
   }, [searchQuery, delay])
 
-  const handleSearchChange = useCallback((value: string) => {
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement> | string) => {
+    const value = typeof e === 'string' ? e : e.target.value
     setSearchQuery(value)
   }, [])
 
