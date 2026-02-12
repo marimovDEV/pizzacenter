@@ -192,7 +192,5 @@ export function ProductModal({ item, isOpen, onClose, language }: ProductModalPr
                 </div>
             </div>
         </div>
-            </div >
-        </div >
     )
 }
