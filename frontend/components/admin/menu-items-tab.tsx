@@ -179,6 +179,7 @@ export function MenuItemsTab() {
   const totalSteps = 4
 
   // Filter & Search
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all")
   const { searchQuery, debouncedQuery, handleSearchChange, clearSearch } = useSearchFilter(300)
   const { selectedCategory, handleCategoryChange } = useCategoryFilter("all")
   const { sortField, sortOrder } = useSort("name", "asc")
@@ -395,6 +396,13 @@ export function MenuItemsTab() {
   const filteredAndSortedItems = useMemo(() => {
     let filtered = [...menuItems]
 
+    // Status filter
+    if (statusFilter === "active") {
+      filtered = filtered.filter(item => item.is_active)
+    } else if (statusFilter === "inactive") {
+      filtered = filtered.filter(item => !item.is_active)
+    }
+
     // Search filter
     if (debouncedQuery.trim()) {
       const query = debouncedQuery.toLowerCase().trim()
@@ -449,8 +457,20 @@ export function MenuItemsTab() {
           <h2 className="text-xl sm:text-2xl font-bold text-white">Taomlar</h2>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            {/* Status Filter */}
+            <Select value={statusFilter} onValueChange={(v: any) => setStatusFilter(v)}>
+              <SelectTrigger className="w-full sm:w-[140px] bg-white/5 border-white/10 text-white rounded-full h-11 focus:ring-emerald-500/50">
+                <SelectValue placeholder="Holat" />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-900 border-white/10 text-white">
+                <SelectItem value="all">Barchasi</SelectItem>
+                <SelectItem value="active">Faol</SelectItem>
+                <SelectItem value="inactive">Faol emas</SelectItem>
+              </SelectContent>
+            </Select>
+
             {/* Search Bar */}
-            <div className="relative w-full sm:w-80">
+            <div className="relative w-full sm:w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
               <Input
                 value={searchQuery}
