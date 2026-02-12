@@ -99,7 +99,7 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
     loading: rawMenuItemsLoading,
     error: rawMenuItemsError,
     refetch: refetchMenuItems,
-  } = useAdminMenuItems()
+  } = useMenuItems()
   const { promotions: apiPromotions, loading: promotionsLoading, error: promotionsError, refetch: refetchPromotions } = usePromotions()
 
   const [categories, setCategories] = useState<Category[]>([])
@@ -120,8 +120,9 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (apiMenuItems && Array.isArray(apiMenuItems)) {
+      // More lenient filtering: don't filter out if category is missing or id is 0
       const activeItems = apiMenuItems.filter(
-        (item: MenuItem) => item?.is_active !== false && item?.category !== null,
+        (item: MenuItem) => item && item.is_active !== false
       )
       setMenuItems(activeItems)
     } else if (!rawMenuItemsLoading && apiMenuItems === null) {

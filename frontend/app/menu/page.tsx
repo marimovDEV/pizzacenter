@@ -15,7 +15,6 @@ import type { Language, MenuItem } from "@/lib/types"
 import { PromotionsCarousel } from "@/components/promotions-carousel"
 import { CartSheet } from "@/components/cart-sheet"
 import { MenuGridSkeleton } from "@/components/menu-skeleton"
-import { FixedSizeList as List } from "react-window"
 
 // --- Constants & Helper Components ---
 
@@ -37,69 +36,6 @@ function useColumnCount() {
 
 
 
-const Row = ({ index, style, data }: any) => {
-  const { items, language, columnCount, gridGap } = data
-  const rowItems = []
-  for (let i = 0; i < columnCount; i++) {
-    const itemIndex = index * columnCount + i
-    if (itemIndex < items.length) {
-      rowItems.push(items[itemIndex])
-    }
-  }
-
-  return (
-    <div
-      style={{
-        ...style,
-        display: "grid",
-        gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
-        gap: `${gridGap}px`,
-        padding: `${gridGap / 2}px ${gridGap}px`,
-      }}
-    >
-      {rowItems.map((item) => (
-        <MenuItemCard
-          key={item.id}
-          item={item}
-          language={language}
-          priority={index < 2}
-        />
-      ))}
-    </div>
-  )
-}
-
-interface MenuVirtualGridProps {
-  items: MenuItem[]
-  language: Language
-}
-
-function MenuVirtualGrid({ items, language }: MenuVirtualGridProps) {
-  const columnCount = useColumnCount()
-  const rowCount = Math.ceil(items.length / columnCount)
-
-  // Item dimensions - Optimized for Tokyo density
-  const rowHeightValue = (typeof window !== "undefined" && window.innerWidth < 768) ? 280 : 380
-  const gridGap = (typeof window !== "undefined" && window.innerWidth < 768) ? 8 : 16
-
-  // Calculate total height to avoid scrollbar issues
-  const totalHeight = typeof window !== "undefined" ? window.innerHeight - 180 : 800
-
-  if (!List || items.length === 0) return null
-
-  return (
-    <List
-      height={totalHeight}
-      width="100%"
-      itemCount={rowCount}
-      itemSize={rowHeightValue}
-      itemData={{ items, language, columnCount, gridGap }}
-      className="scrollbar-hide"
-    >
-      {Row}
-    </List>
-  )
-}
 
 export default function MenuPage() {
   const { language, setLanguage } = useLanguage()
@@ -353,23 +289,27 @@ export default function MenuPage() {
           </nav>
         </div>
 
-        {/* Menu Items Grid - Denser */}
+        {/* Menu Items Grid */}
         <section id="menu-grid" className="max-w-7xl mx-auto">
-          <MenuVirtualGrid
-            items={filteredItems}
-            language={language}
-          />
-        </section>
-
-        {
-          filteredItems.length === 0 && !loading && (
+          {filteredItems.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
+              {filteredItems.map((item, index) => (
+                <MenuItemCard
+                  key={item.id}
+                  item={item}
+                  language={language}
+                  priority={index < 6}
+                />
+              ))}
+            </div>
+          ) : !loading && (
             <div className="text-center py-12">
               <p className="text-white/40 text-sm">
                 {language === "uz" ? "Hech narsa topilmadi" : language === "ru" ? "Ничего не найдено" : "No items found"}
               </p>
             </div>
-          )
-        }
+          )}
+        </section>
       </div >
 
       {/* Fixed bottom cart - Exact height 70px matching padding-bottom */}

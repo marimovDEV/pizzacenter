@@ -330,7 +330,6 @@ export function useCategories() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
         cache: 'no-cache',
       });
 
@@ -425,7 +424,6 @@ export function useMenuItems() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
         cache: 'no-cache',
       });
 
@@ -553,7 +551,6 @@ export function usePromotions() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
         cache: 'no-cache',
       });
 
