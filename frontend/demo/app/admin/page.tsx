@@ -45,7 +45,7 @@ import {
   type MenuItem,
   type Category,
   type Promotion,
-} from "@/lib/restaurant-data"
+} from "@/demo/lib/restaurant-data"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 interface Review {
@@ -417,9 +417,9 @@ export default function AdminPage() {
   const removeIngredient = (index: number) => {
     setNewItem({
       ...newItem,
-      ingredientsUz: newItem.ingredientsUz?.filter((_, i) => i !== index) || [],
-      ingredientsRu: newItem.ingredientsRu?.filter((_, i) => i !== index) || [],
-      ingredients: newItem.ingredients?.filter((_, i) => i !== index) || [],
+      ingredientsUz: newItem.ingredientsUz?.filter((_: any, i: any) => i !== index) || [],
+      ingredientsRu: newItem.ingredientsRu?.filter((_: any, i: any) => i !== index) || [],
+      ingredients: newItem.ingredients?.filter((_: any, i: any) => i !== index) || [],
     })
   }
 
@@ -636,7 +636,7 @@ export default function AdminPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {categories.map((cat) => (
+                          {categories.map((cat: any) => (
                             <SelectItem key={cat.id} value={cat.id}>
                               {cat.icon} {language === "uz" ? cat.nameUz : language === "ru" ? cat.nameRu : cat.name}
                             </SelectItem>
@@ -829,7 +829,7 @@ export default function AdminPage() {
                         </Button>
                         {newItem.ingredientsUz && newItem.ingredientsUz.length > 0 && (
                           <div className="space-y-2 mt-3">
-                            {newItem.ingredientsUz.map((ing, index) => (
+                            {newItem.ingredientsUz.map((ing: any, index: any) => (
                               <div key={index} className="flex items-center justify-between bg-muted p-2 rounded">
                                 <div className="grid grid-cols-3 gap-2 flex-1 text-sm">
                                   <span>{ing}</span>
@@ -894,7 +894,7 @@ export default function AdminPage() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {menuItems.map((item) => (
+              {menuItems.map((item: any) => (
                 <Card key={item.id}>
                   <div className="aspect-video relative overflow-hidden rounded-t-lg">
                     <img
@@ -1131,7 +1131,7 @@ export default function AdminPage() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categories.map((category) => (
+              {categories.map((category: any) => (
                 <Card key={category.id}>
                   <div className="aspect-video relative overflow-hidden rounded-t-lg">
                     <img
@@ -1259,7 +1259,7 @@ export default function AdminPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {categories.map((cat) => (
+                          {categories.map((cat: any) => (
                             <SelectItem key={cat.id} value={cat.id}>
                               {cat.icon} {language === "uz" ? cat.nameUz : language === "ru" ? cat.nameRu : cat.name}
                             </SelectItem>
@@ -1408,7 +1408,7 @@ export default function AdminPage() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {promotions.map((promotion) => (
+              {promotions.map((promotion: any) => (
                 <Card key={promotion.id}>
                   <div className="aspect-video relative overflow-hidden rounded-t-lg">
                     <img

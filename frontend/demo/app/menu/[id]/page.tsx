@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowLeft, Plus, Minus, ShoppingCart, Clock, Star, ChefHat } from "lucide-react"
-import { menuItems, type MenuItem, type CartItem } from "@/lib/restaurant-data"
+import { menuItems, type MenuItem, type CartItem } from "@/demo/lib/restaurant-data"
 import Image from "next/image"
 
 export default function MenuItemDetailPage() {
@@ -21,7 +21,7 @@ export default function MenuItemDetailPage() {
       setLanguage(savedLanguage)
     }
 
-    const foundItem = menuItems.find((i) => i.id === params.id)
+    const foundItem = menuItems.find((i: any) => i.id === params.id)
     setItem(foundItem || null)
   }, [params.id])
 
@@ -173,7 +173,7 @@ export default function MenuItemDetailPage() {
                   {t.ingredients}
                 </h2>
                 <ul className="space-y-2">
-                  {itemIngredients.map((ingredient, index) => (
+                  {itemIngredients.map((ingredient: any, index: any) => (
                     <li key={index} className="text-green-800 flex items-start gap-2">
                       <span className="text-green-600 mt-1">•</span>
                       <span>{ingredient}</span>

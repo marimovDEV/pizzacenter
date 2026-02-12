@@ -2,10 +2,21 @@
 
 import { useCSRF } from './use-csrf';
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import {
+  MenuItem,
+  Category,
+  Promotion,
+  Review,
+  RestaurantInfo,
+  SiteSettings,
+  Feedback
+} from '@/lib/types';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 // API client hook - CSRF token bilan avtomatik ishlaydi
 export function useApiClient() {
-  const { makeAuthenticatedRequest, getCSRFHeaders, isLoading: csrfLoading } = useCSRF();
+  const { makeAuthenticatedRequest, isLoading: csrfLoading } = useCSRF();
 
   const apiClient = useMemo(() => ({
     // GET so'rovlar
@@ -13,12 +24,9 @@ export function useApiClient() {
       // Cache-busting uchun timestamp qo'shish
       const timestamp = new Date().getTime();
       const random = Math.random().toString(36).substring(7);
-      const random2 = Math.random().toString(36).substring(7);
-      const random3 = Math.random().toString(36).substring(7);
       const separator = endpoint.includes('?') ? '&' : '?';
-      const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}${endpoint}${separator}t=${timestamp}&r=${random}&r2=${random2}&r3=${random3}`;
+      const url = `${API_URL}${endpoint}${separator}t=${timestamp}&r=${random}`;
 
-      // Retry mechanism for network errors
       let lastError;
       for (let attempt = 1; attempt <= 3; attempt++) {
         try {
@@ -28,7 +36,7 @@ export function useApiClient() {
               'Content-Type': 'application/json',
             },
             credentials: 'include',
-            cache: 'no-cache', // Cache-ni to'liq o'chirish
+            cache: 'no-cache',
             signal: AbortSignal.timeout(10000), // 10 second timeout
           });
 
@@ -37,19 +45,20 @@ export function useApiClient() {
             throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
           }
 
-          const data = await response.json();
-          return data;
+          return await response.json() as T;
         } catch (error) {
           lastError = error;
+          const err = error as Error;
 
-          // Don't retry on client errors (4xx) or server errors (5xx)
-          if (error.message && (error.message.includes('400') || error.message.includes('401') ||
-            error.message.includes('403') || error.message.includes('404') ||
-            error.message.includes('500'))) {
+          // Don't retry on client errors (4xx) or specific server errors
+          if (err.message && (
+            err.message.includes('400') || err.message.includes('401') ||
+            err.message.includes('403') || err.message.includes('404') ||
+            err.message.includes('500')
+          )) {
             throw error;
           }
 
-          // Wait before retry (exponential backoff)
           if (attempt < 3) {
             await new Promise(resolve => setTimeout(resolve, attempt * 1000));
           }
@@ -62,7 +71,7 @@ export function useApiClient() {
     // POST so'rovlar
     async post<T>(endpoint: string, data: any): Promise<T> {
       const response = await makeAuthenticatedRequest(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}${endpoint}`,
+        `${API_URL}${endpoint}`,
         {
           method: 'POST',
           body: JSON.stringify(data),
@@ -74,16 +83,15 @@ export function useApiClient() {
         throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
-      // 204 No Content yoki bo'sh body holatini tekshirish
-      if (response.status === 204) return undefined as any;
+      if (response.status === 204) return undefined as any as T;
       const text = await response.text();
-      return text ? JSON.parse(text) : undefined;
+      return (text ? JSON.parse(text) : undefined) as T;
     },
 
     // PUT so'rovlar
     async put<T>(endpoint: string, data: any): Promise<T> {
       const response = await makeAuthenticatedRequest(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}${endpoint}`,
+        `${API_URL}${endpoint}`,
         {
           method: 'PUT',
           body: JSON.stringify(data),
@@ -95,15 +103,15 @@ export function useApiClient() {
         throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
-      if (response.status === 204) return undefined as any;
+      if (response.status === 204) return undefined as any as T;
       const text = await response.text();
-      return text ? JSON.parse(text) : undefined;
+      return (text ? JSON.parse(text) : undefined) as T;
     },
 
     // PATCH so'rovlar
     async patch<T>(endpoint: string, data: any): Promise<T> {
       const response = await makeAuthenticatedRequest(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}${endpoint}`,
+        `${API_URL}${endpoint}`,
         {
           method: 'PATCH',
           body: JSON.stringify(data),
@@ -115,15 +123,15 @@ export function useApiClient() {
         throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
-      if (response.status === 204) return undefined as any;
+      if (response.status === 204) return undefined as any as T;
       const text = await response.text();
-      return text ? JSON.parse(text) : undefined;
+      return (text ? JSON.parse(text) : undefined) as T;
     },
 
     // DELETE so'rovlar
     async delete(endpoint: string): Promise<void> {
       const response = await makeAuthenticatedRequest(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}${endpoint}`,
+        `${API_URL}${endpoint}`,
         {
           method: 'DELETE',
         }
@@ -138,11 +146,10 @@ export function useApiClient() {
     // FormData bilan so'rovlar (fayl yuklash uchun)
     async postFormData<T>(endpoint: string, formData: FormData): Promise<T> {
       const response = await makeAuthenticatedRequest(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}${endpoint}`,
+        `${API_URL}${endpoint}`,
         {
           method: 'POST',
           body: formData,
-          // Content-Type ni qo'lda o'rnatmaymiz - brauzer o'zi multipart/form-data belgilaydi
         }
       );
 
@@ -151,19 +158,18 @@ export function useApiClient() {
         throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
-      if (response.status === 204) return undefined as any;
+      if (response.status === 204) return undefined as any as T;
       const text = await response.text();
-      return text ? JSON.parse(text) : undefined;
+      return (text ? JSON.parse(text) : undefined) as T;
     },
 
     // PATCH FormData bilan
     async patchFormData<T>(endpoint: string, formData: FormData): Promise<T> {
       const response = await makeAuthenticatedRequest(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}${endpoint}`,
+        `${API_URL}${endpoint}`,
         {
           method: 'PATCH',
           body: formData,
-          // Content-Type ni qo'lda o'rnatmaymiz - brauzer o'zi multipart/form-data belgilaydi
         }
       );
 
@@ -172,22 +178,22 @@ export function useApiClient() {
         throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
-      if (response.status === 204) return undefined as any;
+      if (response.status === 204) return undefined as any as T;
       const text = await response.text();
-      return text ? JSON.parse(text) : undefined;
+      return (text ? JSON.parse(text) : undefined) as T;
     },
   }), [makeAuthenticatedRequest]);
 
   return {
     ...apiClient,
-    get: apiClient.get, // Qulaylik uchun alohida ham qaytaramiz
+    get: apiClient.get,
     isLoading: csrfLoading,
   };
 }
 
 // Reviews hook
 export function useReviews() {
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -195,7 +201,7 @@ export function useReviews() {
     const fetchReviews = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/reviews/`, {
+        const response = await fetch(`${API_URL}/reviews/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -208,9 +214,8 @@ export function useReviews() {
         }
 
         const data = await response.json();
-        // Filter only approved and not deleted reviews
         const approvedReviews = (data.results || []).filter(
-          (review: any) => review.approved && !review.deleted
+          (review: Review) => review.approved && !review.deleted
         );
         setReviews(approvedReviews);
       } catch (err) {
@@ -220,16 +225,15 @@ export function useReviews() {
       }
     };
 
-    // Fetch only once on mount
     fetchReviews();
-  }, []); // Empty dependency to prevent infinite loop
+  }, []);
 
   return { reviews, loading, error };
 }
 
 // Restaurant Info hook
 export function useRestaurantInfo() {
-  const [restaurantInfo, setRestaurantInfo] = useState<any>(null);
+  const [restaurantInfo, setRestaurantInfo] = useState<RestaurantInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -237,10 +241,8 @@ export function useRestaurantInfo() {
     const fetchRestaurantInfo = async () => {
       try {
         setLoading(true);
-
-        // Add cache-busting to always get fresh data
         const timestamp = new Date().getTime();
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/restaurant-info/?t=${timestamp}`, {
+        const response = await fetch(`${API_URL}/restaurant-info/?t=${timestamp}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -263,9 +265,7 @@ export function useRestaurantInfo() {
     };
 
     fetchRestaurantInfo();
-
-    // No automatic refresh - data will be fetched on component mount only
-  }, []); // Empty dependency array to prevent infinite loop
+  }, []);
 
   return { restaurantInfo, loading, error };
 }
@@ -273,7 +273,7 @@ export function useRestaurantInfo() {
 
 // Site Settings hook
 export function useSiteSettings() {
-  const [siteSettings, setSiteSettings] = useState<any>(null);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -281,10 +281,8 @@ export function useSiteSettings() {
     const fetchSiteSettings = async () => {
       try {
         setLoading(true);
-
-        // Add cache-busting to always get fresh data
         const timestamp = new Date().getTime();
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/site-settings/?t=${timestamp}`, {
+        const response = await fetch(`${API_URL}/site-settings/?t=${timestamp}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -307,89 +305,27 @@ export function useSiteSettings() {
     };
 
     fetchSiteSettings();
-
-    // No automatic refresh - data will be fetched on component mount only
-  }, []); // Empty dependency array to prevent infinite loop
+  }, []);
 
   return { siteSettings, loading, error };
 }
 
 // Categories hook
 export function useCategories() {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [lastFetchTime, setLastFetchTime] = useState(0);
 
   const fetchCategories = useCallback(async (force = false) => {
-    // Prevent excessive API calls - only fetch if more than 5 seconds have passed or forced
     const now = Date.now();
-    if (!force && now - lastFetchTime < 5000) {
-      console.log('useCategories: Skipping fetch - too recent');
-      return;
-    }
+    if (!force && now - lastFetchTime < 5000) return;
 
     try {
       setLoading(true);
       setError(null);
-      // Get only active categories for frontend display
-      // Add cache-busting to always get fresh data
       const timestamp = new Date().getTime();
-      const random = Math.random().toString(36).substring(7);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/categories/?t=${timestamp}&r=${random}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        cache: 'no-cache', // Added this line
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      // Handle both paginated (results) and non-paginated (array) responses
-      const items = Array.isArray(data) ? data : (data.results || []);
-      setCategories(items);
-      setLastFetchTime(now);
-    } catch (err) {
-      console.error('useCategories: Error fetching categories:', err);
-      setError(err as Error);
-    } finally {
-      setLoading(false);
-    }
-  }, [lastFetchTime]);
-
-  useEffect(() => {
-    fetchCategories(true); // Force initial fetch
-  }, []); // Empty dependency array to prevent infinite loop
-
-  const refetch = useCallback(() => {
-    console.log('useCategories: Force refetch called');
-    fetchCategories(true); // Force refetch
-  }, [fetchCategories]);
-
-  return { categories, loading, error, refetch };
-}
-
-// Admin panel uchun alohida hook - barcha kategoriyalarni olish (o'chirilganlar ham)
-export function useAdminCategories() {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  const fetchCategories = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      // Admin uchun barcha kategoriyalarni olish (o'chirilganlar ham)
-      const timestamp = new Date().getTime();
-      const random = Math.random().toString(36).substring(7);
-      const random2 = Math.random().toString(36).substring(7);
-      const random3 = Math.random().toString(36).substring(7);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/categories/?show_all=true&t=${timestamp}&r=${random}&r2=${random2}&r3=${random3}`, {
+      const response = await fetch(`${API_URL}/categories/?t=${timestamp}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -403,9 +339,54 @@ export function useAdminCategories() {
       }
 
       const data = await response.json();
-      // Handle both paginated (results) and non-paginated (array) responses
       const items = Array.isArray(data) ? data : (data.results || []);
-      setCategories(items);
+      setCategories(items as Category[]);
+      setLastFetchTime(now);
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setLoading(false);
+    }
+  }, [lastFetchTime]);
+
+  useEffect(() => {
+    fetchCategories(true);
+  }, []);
+
+  const refetch = useCallback(() => {
+    fetchCategories(true);
+  }, [fetchCategories]);
+
+  return { categories, loading, error, refetch };
+}
+
+// Admin Categories hook
+export function useAdminCategories() {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const fetchCategories = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const timestamp = new Date().getTime();
+      const response = await fetch(`${API_URL}/categories/?show_all=true&t=${timestamp}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        cache: 'no-cache',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const items = Array.isArray(data) ? data : (data.results || []);
+      setCategories(items as Category[]);
     } catch (err) {
       setError(err as Error);
     } finally {
@@ -418,7 +399,6 @@ export function useAdminCategories() {
   }, [fetchCategories]);
 
   const refetch = useCallback(() => {
-    console.log('useAdminCategories: Force refetch called');
     fetchCategories();
   }, [fetchCategories]);
 
@@ -427,26 +407,20 @@ export function useAdminCategories() {
 
 // Menu Items hook
 export function useMenuItems() {
-  const [menuItems, setMenuItems] = useState([]);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [lastFetchTime, setLastFetchTime] = useState(0);
 
   const fetchMenuItems = useCallback(async (force = false) => {
-    // Prevent excessive API calls - only fetch if more than 5 seconds have passed or forced
     const now = Date.now();
-    if (!force && now - lastFetchTime < 5000) {
-      return;
-    }
+    if (!force && now - lastFetchTime < 5000) return;
 
     try {
       setLoading(true);
       setError(null);
-      const apiUrl = 'http://localhost:8000/api';
-
-      // Add cache-busting to always get fresh data
       const timestamp = new Date().getTime();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/menu-items/?t=${timestamp}`, {
+      const response = await fetch(`${API_URL}/menu-items/?t=${timestamp}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -460,9 +434,8 @@ export function useMenuItems() {
       }
 
       const data = await response.json();
-      // Handle both paginated (results) and non-paginated (array) responses
       const items = Array.isArray(data) ? data : (data.results || []);
-      setMenuItems(items);
+      setMenuItems(items as MenuItem[]);
       setLastFetchTime(now);
     } catch (err) {
       setError(err as Error);
@@ -472,41 +445,32 @@ export function useMenuItems() {
   }, [lastFetchTime]);
 
   useEffect(() => {
-    fetchMenuItems(true); // Force initial fetch
-  }, []); // Empty dependency array to prevent infinite loops
+    fetchMenuItems(true);
+  }, []);
 
   const refetch = useCallback(() => {
-    fetchMenuItems(true); // Force refetch
+    fetchMenuItems(true);
   }, [fetchMenuItems]);
 
   return { menuItems, loading, error, refetch };
 }
 
-// Admin panel uchun alohida hook - barcha menu itemlarni olish (pagination yo'q)
+// Admin Menu Items hook
 export function useAdminMenuItems() {
-  const [menuItems, setMenuItems] = useState([]);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [lastFetchTime, setLastFetchTime] = useState(0);
 
   const fetchMenuItems = useCallback(async (force = false) => {
-    // Prevent excessive API calls - only fetch if more than 5 seconds have passed or forced
     const now = Date.now();
-    if (!force && now - lastFetchTime < 5000) {
-      return;
-    }
+    if (!force && now - lastFetchTime < 5000) return;
 
     try {
       setLoading(true);
       setError(null);
-      const apiUrl = 'http://localhost:8000/api';
-
-      // Add cache-busting and show_all=true to get all items without pagination
       const timestamp = new Date().getTime();
-      const random = Math.random().toString(36).substring(7);
-      const random2 = Math.random().toString(36).substring(7);
-      const random3 = Math.random().toString(36).substring(7);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/menu-items/?show_all=true&t=${timestamp}&r=${random}&r2=${random2}&r3=${random3}`, {
+      const response = await fetch(`${API_URL}/menu-items/?show_all=true&t=${timestamp}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -520,9 +484,8 @@ export function useAdminMenuItems() {
       }
 
       const data = await response.json();
-      // When show_all=true, response is a direct array, not paginated
       const items = Array.isArray(data) ? data : (data.results || []);
-      setMenuItems(items);
+      setMenuItems(items as MenuItem[]);
       setLastFetchTime(now);
     } catch (err) {
       setError(err as Error);
@@ -532,11 +495,11 @@ export function useAdminMenuItems() {
   }, [lastFetchTime]);
 
   useEffect(() => {
-    fetchMenuItems(true); // Force initial fetch
-  }, []); // Empty dependency array to prevent infinite loops
+    fetchMenuItems(true);
+  }, []);
 
   const refetch = useCallback(() => {
-    fetchMenuItems(true); // Force refetch
+    fetchMenuItems(true);
   }, [fetchMenuItems]);
 
   return { menuItems, loading, error, refetch };
@@ -545,7 +508,7 @@ export function useAdminMenuItems() {
 // Single Menu Item hook
 export function useMenuItem(id: string | number) {
   const { get } = useApiClient();
-  const [menuItem, setMenuItem] = useState(null);
+  const [menuItem, setMenuItem] = useState<MenuItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -555,7 +518,7 @@ export function useMenuItem(id: string | number) {
     const fetchMenuItem = async () => {
       try {
         setLoading(true);
-        const response = await get<any>(`/menu-items/${id}/`);
+        const response = await get<MenuItem>(`/menu-items/${id}/`);
         setMenuItem(response);
       } catch (err) {
         setError(err as Error);
@@ -565,32 +528,27 @@ export function useMenuItem(id: string | number) {
     };
 
     fetchMenuItem();
-  }, [id, get]); // Depend on get function too
+  }, [id, get]);
 
   return { menuItem, loading, error };
 }
 
 // Promotions hook
 export function usePromotions() {
-  const [promotions, setPromotions] = useState([]);
+  const [promotions, setPromotions] = useState<Promotion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [lastFetchTime, setLastFetchTime] = useState(0);
 
   const fetchPromotions = useCallback(async (force = false) => {
-    // Prevent excessive API calls - only fetch if more than 5 seconds have passed or forced
     const now = Date.now();
-    if (!force && now - lastFetchTime < 5000) {
-      console.log('usePromotions: Skipping fetch - too recent');
-      return;
-    }
+    if (!force && now - lastFetchTime < 5000) return;
 
     try {
       setLoading(true);
       setError(null);
-      // Add cache busting to force fresh data
       const timestamp = new Date().getTime();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/promotions/?t=${timestamp}`, {
+      const response = await fetch(`${API_URL}/promotions/?t=${timestamp}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -604,12 +562,10 @@ export function usePromotions() {
       }
 
       const data = await response.json();
-      // Handle both paginated (results) and non-paginated (array) responses
       const items = Array.isArray(data) ? data : (data.results || []);
-      setPromotions(items);
+      setPromotions(items as Promotion[]);
       setLastFetchTime(now);
     } catch (err) {
-      console.error('usePromotions: Error fetching promotions:', err);
       setError(err as Error);
     } finally {
       setLoading(false);
@@ -617,55 +573,12 @@ export function usePromotions() {
   }, [lastFetchTime]);
 
   useEffect(() => {
-    fetchPromotions(true); // Force initial fetch
-  }, []); // Empty dependency array to prevent infinite loops
+    fetchPromotions(true);
+  }, []);
 
   const refetch = useCallback(() => {
-    console.log('usePromotions: Force refetch called');
-    fetchPromotions(true); // Force refetch
+    fetchPromotions(true);
   }, [fetchPromotions]);
 
   return { promotions, loading, error, refetch };
 }
-
-
-
-// Hook ishlatish misoli:
-/*
-function AdminComponent() {
-  const api = useApiClient();
-
-  const handleCreateItem = async (itemData: any) => {
-    try {
-      const newItem = await api.post('/menu-items/', itemData);
-    } catch (error) {
-      console.error('Error creating item:', error);
-    }
-  };
-
-  const handleUpdateItem = async (id: number, itemData: any) => {
-    try {
-      const updatedItem = await api.patch(`/menu-items/${id}/`, itemData);
-    } catch (error) {
-      console.error('Error updating item:', error);
-    }
-  };
-
-  const handleDeleteItem = async (id: number) => {
-    try {
-      await api.delete(`/menu-items/${id}/`);
-    } catch (error) {
-      console.error('Error deleting item:', error);
-    }
-  };
-
-  return (
-    <div>
-      {api.isLoading && <p>Loading...</p>}
-      <button onClick={() => handleCreateItem({ name: 'Test Item' })}>
-        Create Item
-      </button>
-    </div>
-  );
-}
-*/

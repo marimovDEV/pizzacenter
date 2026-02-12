@@ -2,7 +2,6 @@ import type React from "react"
 import type { Metadata } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { Toaster } from "@/components/ui/sonner"
 import { MenuProvider } from "@/lib/menu-context"
@@ -104,7 +103,6 @@ export default function RootLayout({
               <FeedbackProvider>
                 <Suspense fallback={null}>{children}</Suspense>
                 <Toaster />
-                <Analytics />
               </FeedbackProvider>
             </CartProvider>
           </MenuProvider>

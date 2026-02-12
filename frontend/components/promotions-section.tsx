@@ -62,14 +62,14 @@ export function PromotionsSection() {
   }
 
   const getTitle = () => {
-    if (language === "uz") return currentPromotion.title_uz || currentPromotion.titleUz
-    if (language === "ru") return currentPromotion.title_ru || currentPromotion.titleRu
+    if (language === "uz") return currentPromotion.title_uz || currentPromotion.title
+    if (language === "ru") return currentPromotion.title_ru || currentPromotion.title
     return currentPromotion.title
   }
 
   const getDescription = () => {
-    if (language === "uz") return currentPromotion.description_uz || currentPromotion.descriptionUz
-    if (language === "ru") return currentPromotion.description_ru || currentPromotion.descriptionRu
+    if (language === "uz") return currentPromotion.description_uz || currentPromotion.description
+    if (language === "ru") return currentPromotion.description_ru || currentPromotion.description
     return currentPromotion.description
   }
 
@@ -111,12 +111,11 @@ export function PromotionsSection() {
                   AKSIYA
                 </div>
 
-                {(currentPromotion.discount_percentage > 0 || currentPromotion.discount_amount > 0) && (
+                {((currentPromotion.discount_percentage ?? 0) > 0 || (currentPromotion.discount_amount ?? 0) > 0) && (
                   <div className="absolute top-4 left-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-4 py-2 rounded-full text-lg font-bold shadow-lg">
-                    {currentPromotion.discount_percentage > 0 && `-${currentPromotion.discount_percentage}%`}
-                    {currentPromotion.discount_percentage === 0 && currentPromotion.discount_amount > 0 &&
-                      `-${formatPrice(currentPromotion.discount_amount)}`
-                    }
+                    {(currentPromotion.discount_percentage ?? 0) > 0 && `-${currentPromotion.discount_percentage}%`}
+                    {(currentPromotion.discount_percentage ?? 0) === 0 && (currentPromotion.discount_amount ?? 0) > 0 &&
+                      `-${formatPrice(currentPromotion.discount_amount ?? 0)}`}
                   </div>
                 )}
               </div>

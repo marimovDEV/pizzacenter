@@ -29,7 +29,7 @@ export function FeedbackTab() {
         }, 200)
 
         toast.success("Fikr o'chirildi")
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error deleting feedback:', error)
         // If it's a 404 error, it means the feedback was already deleted
         if (error.message && error.message.includes('404')) {
@@ -117,12 +117,12 @@ export function FeedbackTab() {
             <div
               key={feedback.id}
               className={`backdrop-blur-xl rounded-2xl p-6 border hover:bg-opacity-20 transition-all ${feedback.feedback_type === "complaint"
-                  ? "bg-red-500/10 border-red-500/30"
-                  : feedback.feedback_type === "compliment"
-                    ? "bg-yellow-500/10 border-yellow-500/30"
-                    : feedback.feedback_type === "question"
-                      ? "bg-blue-500/10 border-blue-500/30"
-                      : "bg-green-500/10 border-green-500/30"
+                ? "bg-red-500/10 border-red-500/30"
+                : feedback.feedback_type === "compliment"
+                  ? "bg-yellow-500/10 border-yellow-500/30"
+                  : feedback.feedback_type === "question"
+                    ? "bg-blue-500/10 border-blue-500/30"
+                    : "bg-green-500/10 border-green-500/30"
                 } ${deletingFeedbackId === feedback.id ? 'opacity-50' : ''
                 }`}
             >
@@ -165,12 +165,12 @@ export function FeedbackTab() {
               </div>
 
               <div className={`rounded-xl p-4 border ${feedback.feedback_type === "complaint"
-                  ? "bg-red-500/5 border-red-500/20"
-                  : feedback.feedback_type === "compliment"
-                    ? "bg-yellow-500/5 border-yellow-500/20"
-                    : feedback.feedback_type === "question"
-                      ? "bg-blue-500/5 border-blue-500/20"
-                      : "bg-green-500/5 border-green-500/20"
+                ? "bg-red-500/5 border-red-500/20"
+                : feedback.feedback_type === "compliment"
+                  ? "bg-yellow-500/5 border-yellow-500/20"
+                  : feedback.feedback_type === "question"
+                    ? "bg-blue-500/5 border-blue-500/20"
+                    : "bg-green-500/5 border-green-500/20"
                 }`}>
                 <p className="text-white/90 leading-relaxed whitespace-pre-wrap">{feedback.message}</p>
               </div>

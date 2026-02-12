@@ -10,12 +10,14 @@ import { useMenu } from "@/lib/menu-context"
 import { useCart } from "@/lib/cart-context"
 import { MenuItemCard } from "@/components/menu-item-card"
 import { useLanguage } from "@/lib/language-context"
-import type { Language } from "@/lib/types"
+import type { Language, MenuItem } from "@/lib/types"
 
 import { PromotionsCarousel } from "@/components/promotions-carousel"
 import { CartSheet } from "@/components/cart-sheet"
 import { MenuGridSkeleton } from "@/components/menu-skeleton"
-import { List } from "react-window"
+// @ts-ignore
+import { FixedSizeList } from "react-window"
+const List = FixedSizeList as any
 
 // --- Constants & Helper Components ---
 
@@ -32,16 +34,10 @@ function useWindowSize() {
   return size
 }
 
-interface RowComponentProps {
-  index: number
-  style: any
-  items: any[]
-  language: "uz" | "ru" | "en"
-  columnCount: number
-  gridGap: number
-}
 
-const Row = ({ index, style, items, language, columnCount, gridGap }: RowComponentProps) => {
+
+const Row = ({ index, style, data }: { index: number; style: any; data: any }) => {
+  const { items, language, columnCount, gridGap } = data
   const rowItems = []
   for (let i = 0; i < columnCount; i++) {
     const itemIndex = index * columnCount + i
@@ -72,6 +68,11 @@ const Row = ({ index, style, items, language, columnCount, gridGap }: RowCompone
   )
 }
 
+interface MenuVirtualGridProps {
+  items: MenuItem[]
+  language: Language
+}
+
 function MenuVirtualGrid({ items, language }: MenuVirtualGridProps) {
   const [width] = useWindowSize()
   const listRef = useRef<any>(null)
@@ -92,22 +93,22 @@ function MenuVirtualGrid({ items, language }: MenuVirtualGridProps) {
 
   return (
     <List
-      listRef={listRef}
-      style={{ height: totalHeight, width: "100%" }}
-      defaultHeight={800}
-      rowCount={rowCount}
-      rowHeight={rowHeightValue}
-      rowComponent={Row}
-      rowProps={{ items, language, columnCount, gridGap }}
+      height={totalHeight}
+      itemCount={rowCount}
+      itemSize={rowHeightValue}
+      width="100%"
+      itemData={{ items, language, columnCount, gridGap } as any}
       className="scrollbar-hide"
-    />
+    >
+      {Row}
+    </List>
   )
 }
 
 export default function MenuPage() {
   const { language, setLanguage } = useLanguage()
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
   const { categories, menuItems, loading } = useMenu()
   const { getTotalItems } = useCart()
 
@@ -121,11 +122,10 @@ export default function MenuPage() {
 
     // Kategoriya bo'yicha filtrlash
     if (selectedCategory) {
-      // Convert both to numbers for comparison to handle type mismatches
-      const selectedCategoryId = parseInt(selectedCategory)
+      // Both are numbers now
       items = items.filter((item) => {
-        const itemCategoryId = parseInt(item.category.toString())
-        return itemCategoryId === selectedCategoryId
+        const itemCategoryId = item.category
+        return itemCategoryId === selectedCategory
       })
 
       // Agar kategoriya tanlangan bo'lsa, faqat o'sha kategoriya ichidagi tartib bo'yicha saralash

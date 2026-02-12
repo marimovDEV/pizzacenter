@@ -22,6 +22,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'api.pizzacentergarden.uz',
+        pathname: '/media/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'pizzacentergarden.uz',
         pathname: '/media/**',
       },
@@ -33,8 +38,7 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     unoptimized: false,
     loader: 'default',
-    domains: ['localhost', 'pizzacentr.uz', 'pizzacentergarden.uz'],
-    dangerouslyAllowSVG: true,
+    domains: ['localhost', 'pizzacentr.uz', 'pizzacentergarden.uz', 'api.pizzacentergarden.uz'],
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   swcMinify: true,

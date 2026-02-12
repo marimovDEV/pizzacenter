@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import type { Feedback } from "./types"
+import type { Language, MenuItem, Promotion } from "@/lib/types"
 import { apiClient } from "./api"
 
 // Use shared apiClient instead of forcing remote HTTPS
@@ -10,7 +11,7 @@ const correctApiClient = apiClient;
 interface FeedbackContextType {
   feedbacks: Feedback[]
   loading: boolean
-  addFeedback: (feedback: Omit<Feedback, "id" | "date" | "read">) => Promise<void>
+  addFeedback: (feedback: Omit<Feedback, "id" | "created_at" | "updated_at">) => Promise<void>
   markAsRead: (id: number) => void
   deleteFeedback: (id: number) => void
   refreshFeedbacks: () => Promise<void>

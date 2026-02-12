@@ -21,18 +21,18 @@ export function PromotionModal({ promotion, isOpen, onClose, language }: Promoti
 
   if (!isOpen || !promotion) return null
 
-  const cartItem = cart.find((ci) => ci.menuItem.id === `promotion-${promotion.id}`)
+  const cartItem = cart.find((ci) => ci.menuItem.id === promotion.id)
   const cartQuantity = cartItem?.quantity || 0
 
   const getTitle = () => {
-    if (language === "uz") return promotion.title_uz || promotion.titleUz || promotion.title
-    if (language === "ru") return promotion.title_ru || promotion.titleRu || promotion.title
+    if (language === "uz") return promotion.title_uz || promotion.title
+    if (language === "ru") return promotion.title_ru || promotion.title
     return promotion.title
   }
 
   const getDescription = () => {
-    if (language === "uz") return promotion.description_uz || promotion.descriptionUz || promotion.description
-    if (language === "ru") return promotion.description_ru || promotion.descriptionRu || promotion.description
+    if (language === "uz") return promotion.description_uz || promotion.description
+    if (language === "ru") return promotion.description_ru || promotion.description
     return promotion.description
   }
 
@@ -77,7 +77,7 @@ export function PromotionModal({ promotion, isOpen, onClose, language }: Promoti
 
   const handleDecrement = () => {
     if (cartQuantity > 0) {
-      updateQuantity(`promotion-${promotion.id}`, cartQuantity - 1)
+      updateQuantity(promotion.id, cartQuantity - 1)
     }
   }
 

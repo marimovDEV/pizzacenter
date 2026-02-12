@@ -2,14 +2,20 @@
 
 import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
-import type { CartItem, MenuItem, Promotion } from "./types"
+import type { MenuItem, Promotion } from "./types"
+
+// Local state uchun alohida type (backend'ning CartItem'idan farq qiladi)
+interface LocalCartItem {
+  menuItem: MenuItem
+  quantity: number
+}
 
 interface CartContextType {
-  cart: CartItem[]
+  cart: LocalCartItem[]
   addToCart: (item: MenuItem) => void
   addPromotionToCart: (promotion: Promotion) => void
-  removeFromCart: (itemId: string) => void
-  updateQuantity: (itemId: string, quantity: number) => void
+  removeFromCart: (itemId: number | string) => void
+  updateQuantity: (itemId: number | string, quantity: number) => void
   clearCart: () => void
   getTotalPrice: () => number
   getTotalItems: () => number
@@ -18,13 +24,18 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [cart, setCart] = useState<CartItem[]>([])
+  const [cart, setCart] = useState<LocalCartItem[]>([])
 
   // Load from localStorage on mount
   useEffect(() => {
     const savedCart = localStorage.getItem("cart")
     if (savedCart) {
-      setCart(JSON.parse(savedCart))
+      try {
+        setCart(JSON.parse(savedCart))
+      } catch (e) {
+        console.error("Failed to parse cart from localStorage", e)
+        setCart([])
+      }
     }
   }, [])
 
@@ -47,8 +58,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const addPromotionToCart = (promotion: Promotion) => {
     // Promotion'ni MenuItem format'iga o'tkazish
+    // Promotion ID'si number bo'lgani uchun, string ID bilan muammo bo'lishi mumkin
+    // Lekin frontend logic uchun bizga faqat ID kerak.
     const promotionAsMenuItem: MenuItem = {
-      id: `promotion-${promotion.id}`,
+      id: promotion.id as any, // Bypass for promotion ID
       name: promotion.title,
       name_uz: promotion.title_uz,
       name_ru: promotion.title_ru,
@@ -66,24 +79,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       category: promotion.category || 0,
       available: true,
       is_active: promotion.is_active,
+      global_order: 0,
+      category_order: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     }
 
     setCart((prev) => {
-      const existingItem = prev.find((cartItem) => cartItem.menuItem.id === `promotion-${promotion.id}`)
+      const existingItem = prev.find((cartItem) => cartItem.menuItem.id === promotion.id)
       if (existingItem) {
         return prev.map((cartItem) =>
-          cartItem.menuItem.id === `promotion-${promotion.id}` ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem,
+          cartItem.menuItem.id === promotion.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem,
         )
       }
       return [...prev, { menuItem: promotionAsMenuItem, quantity: 1 }]
     })
   }
 
-  const removeFromCart = (itemId: string) => {
+  const removeFromCart = (itemId: number | string) => {
     setCart((prev) => prev.filter((item) => item.menuItem.id !== itemId))
   }
 
-  const updateQuantity = (itemId: string, quantity: number) => {
+  const updateQuantity = (itemId: number | string, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(itemId)
       return

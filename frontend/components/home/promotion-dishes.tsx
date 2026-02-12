@@ -38,16 +38,15 @@ export function PromotionDishesSection() {
 
         const activePromos = promotions.filter(p => p.is_active)
         const promotedItemIds = activePromos
-            .map(p => p.linked_product)
-            .filter(id => id !== undefined && id !== null)
-            .map(id => String(id))
+            .map(p => p.linked_dish)
+            .filter(id => id !== undefined && id !== null) as number[]
 
         return menuItems.filter(item => {
             if (!item.is_active || !item.available) return false
             return promotedItemIds.includes(item.id)
         }).map(item => {
             // Find the specific promotion for this item to get discount info
-            const promo = activePromos.find(p => String(p.linked_product) === item.id)
+            const promo = activePromos.find(p => p.linked_dish === item.id)
             return {
                 item,
                 discountBadge: promo?.discount_display || (promo?.discount_percentage ? `-${promo.discount_percentage}%` : "AKSIYA"),

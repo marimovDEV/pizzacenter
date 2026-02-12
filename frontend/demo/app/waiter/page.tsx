@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ArrowLeft, Clock, CheckCircle, ChefHat, Utensils, RefreshCw, User } from "lucide-react"
-import { getStoredOrders, updateOrderStatus, formatPrice, type Order } from "@/lib/restaurant-data"
+import { getStoredOrders, updateOrderStatus, formatPrice, type Order } from "@/demo/lib/restaurant-data"
 
 export default function WaiterPage() {
   const [orders, setOrders] = useState<Order[]>([])
@@ -18,7 +18,7 @@ export default function WaiterPage() {
   // Load orders from localStorage
   const loadOrders = () => {
     const storedOrders = getStoredOrders()
-    setOrders(storedOrders.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()))
+    setOrders(storedOrders.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()))
     setLastRefresh(new Date())
   }
 
@@ -312,7 +312,7 @@ export default function WaiterPage() {
                     {language === "uz" ? "Buyurtma tafsilotlari" : "Order Details"}
                   </h4>
                   <div className="space-y-3">
-                    {selectedOrder.items.map((item) => (
+                    {selectedOrder.items.map((item: any) => (
                       <div key={item.id} className="flex items-center gap-4 p-3 border rounded-lg">
                         <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
                           <img

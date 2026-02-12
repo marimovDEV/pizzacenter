@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ArrowLeft, Plus, Minus, Trash2, ShoppingBag, ChevronDown } from "lucide-react"
-import { formatPrice, saveOrder, type CartItem, type Order } from "@/lib/restaurant-data"
+import { formatPrice, saveOrder, type CartItem, type Order } from "@/demo/lib/restaurant-data"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
 
@@ -33,7 +33,7 @@ export default function CartPage() {
     if (newQuantity <= 0) {
       setCart((prev) => prev.filter((item) => item.id !== itemId))
     } else {
-      setCart((prev) => prev.map((item) => (item.id === itemId ? { ...item, quantity: newQuantity } : item)))
+      setCart((prev) => prev.map((item: any) => (item.id === itemId ? { ...item, quantity: newQuantity } : item)))
     }
   }
 
@@ -314,7 +314,7 @@ export default function CartPage() {
               <p className="text-sm text-green-50 mt-1">{t.modifyItems}</p>
             </div>
             <div className="divide-y">
-              {cart.map((item) => (
+              {cart.map((item: any) => (
                 <div key={item.id} className="p-4 hover:bg-gray-50 transition-colors">
                   <div className="flex gap-4">
                     <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">

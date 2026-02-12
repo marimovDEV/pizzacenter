@@ -51,11 +51,8 @@ const MenuItemCard = memo(({
   onEdit?: (item: MenuItem) => void
   onDelete?: (item: MenuItem) => void
 }) => {
-  const categoryId = typeof item.category === 'number' ? item.category : parseInt(String(item.category))
-  const category = adminCategories?.find((cat) => {
-    const catId = typeof cat.id === 'number' ? cat.id : parseInt(String(cat.id))
-    return catId === categoryId
-  })
+  const categoryId = item.category
+  const category = adminCategories?.find((cat) => cat.id === categoryId)
 
   // Format ingredients for display card
   const ingredientsList = [
@@ -67,7 +64,7 @@ const MenuItemCard = memo(({
     <div
       className={cn(
         "bg-white/10 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/20 shadow-xl transition-opacity group relative",
-        deletingItemId === item.id && 'opacity-50'
+        String(deletingItemId) === String(item.id) && 'opacity-50'
       )}
     >
       <div className="relative h-40 sm:h-48">
@@ -157,7 +154,7 @@ export function MenuItemsTab() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [itemToDelete, setItemToDelete] = useState<MenuItem | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [deletingItemId, setDeletingItemId] = useState<string | null>(null)
+  const [deletingItemId, setDeletingItemId] = useState<number | null>(null)
   const [previewOpen, setPreviewOpen] = useState(false)
 
   // Wizard State
@@ -221,8 +218,9 @@ export function MenuItemsTab() {
       const val = tagInput.trim()
       if (val) {
         const langKey = activeLang === 'uz' ? 'ingredients_uz' : activeLang === 'ru' ? 'ingredients_ru' : 'ingredients'
-        if (!formData[langKey].includes(val)) {
-          setFormData(prev => ({ ...prev, [langKey]: [...prev[langKey], val] }))
+        const ingredients = formData[langKey as keyof typeof formData] as string[]
+        if (!ingredients.includes(val)) {
+          setFormData(prev => ({ ...prev, [langKey]: [...(prev[langKey as keyof typeof formData] as string[]), val] }))
         }
         setTagInput("")
       }
@@ -231,7 +229,7 @@ export function MenuItemsTab() {
 
   const removeTag = (tag: string, lang: 'uz' | 'ru' | 'en') => {
     const langKey = lang === 'uz' ? 'ingredients_uz' : lang === 'ru' ? 'ingredients_ru' : 'ingredients'
-    setFormData(prev => ({ ...prev, [langKey]: prev[langKey].filter(t => t !== tag) }))
+    setFormData(prev => ({ ...prev, [langKey]: (prev[langKey as keyof typeof formData] as string[]).filter(t => t !== tag) }))
   }
 
   const handleSubmit = async () => {
@@ -265,7 +263,7 @@ export function MenuItemsTab() {
       }
 
       if (editingItem) {
-        const itemId = parseInt(editingItem.id)
+        const itemId = editingItem.id
         await api.patchFormData(`/menu-items/${itemId}/`, formDataToSend)
         toast.success("Taom yangilandi")
       } else {
@@ -313,7 +311,7 @@ export function MenuItemsTab() {
       prep_time: item.prep_time || "15",
       global_order: item.global_order || 0,
       category_order: item.category_order || 0,
-      category: item.category ? item.category.toString() : "",
+      category: item.category ? item.category.toString() : "", // Convert ID to string
       available: item.available !== false,
       is_active: item.is_active !== false,
     })
@@ -329,7 +327,7 @@ export function MenuItemsTab() {
     if (itemToDelete) {
       setDeletingItemId(itemToDelete.id)
       try {
-        const itemId = parseInt(itemToDelete.id)
+        const itemId = itemToDelete.id
         await api.delete(`/menu-items/${itemId}/`)
 
         // Immediately update context state (optimistic UI update)
@@ -376,7 +374,7 @@ export function MenuItemsTab() {
       )
     }
     if (selectedCategory !== "all") {
-      filtered = filtered.filter(item => String(item.category) === selectedCategory)
+      filtered = filtered.filter(item => item.category === parseInt(selectedCategory))
     }
 
     // Sort logic (unchanged)
@@ -525,7 +523,7 @@ export function MenuItemsTab() {
                         <PopoverTrigger asChild>
                           <Button role="combobox" aria-expanded={openCombobox} variant="outline" className="w-full justify-between bg-white/5 border-white/20 text-white hover:bg-white/10">
                             {formData.category
-                              ? adminCategories.find(c => c.id.toString() === formData.category)?.name_uz || "Tanlandi"
+                              ? adminCategories.find(c => c.id === parseInt(formData.category))?.name_uz || "Tanlandi"
                               : "Kategoriyani tanlang..."}
                             <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
@@ -821,7 +819,7 @@ export function MenuItemsTab() {
             adminCategories={adminCategories}
             onEdit={handleEdit}
             onDelete={handleDeleteClick}
-            deletingItemId={deletingItemId}
+            deletingItemId={String(deletingItemId)}
           />
         ))}
       </div>

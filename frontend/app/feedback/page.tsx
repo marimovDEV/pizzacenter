@@ -26,8 +26,6 @@ export default function FeedbackPage() {
         phone,
         message,
         feedback_type: type,
-        email: null,
-        rating: null,
         is_read: false
       })
       toast.success("Xabaringiz yuborildi! Tez orada siz bilan bog'lanamiz.")
@@ -61,8 +59,8 @@ export default function FeedbackPage() {
               <button
                 onClick={() => setType("suggestion")}
                 className={`flex-1 py-3 rounded-xl font-semibold transition-all ${type === "suggestion"
-                    ? "bg-white/30 text-white border-2 border-white/50"
-                    : "bg-white/10 text-white/70 border border-white/20"
+                  ? "bg-white/30 text-white border-2 border-white/50"
+                  : "bg-white/10 text-white/70 border border-white/20"
                   }`}
               >
                 Taklif
@@ -70,8 +68,8 @@ export default function FeedbackPage() {
               <button
                 onClick={() => setType("complaint")}
                 className={`flex-1 py-3 rounded-xl font-semibold transition-all ${type === "complaint"
-                    ? "bg-white/30 text-white border-2 border-white/50"
-                    : "bg-white/10 text-white/70 border border-white/20"
+                  ? "bg-white/30 text-white border-2 border-white/50"
+                  : "bg-white/10 text-white/70 border border-white/20"
                   }`}
               >
                 Shikoyat

@@ -35,7 +35,7 @@ export function PromotionsTab() {
   const [editingPromotion, setEditingPromotion] = useState<Promotion | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [promotionToDelete, setPromotionToDelete] = useState<Promotion | null>(null)
-  const [deletingPromotionId, setDeletingPromotionId] = useState<string | null>(null)
+  const [deletingPromotionId, setDeletingPromotionId] = useState<number | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Combobox State
@@ -129,7 +129,7 @@ export function PromotionsTab() {
       title: prev.title || "Super promotion",
       description: prev.description || `Special offer for ${food.name_en || food.name}`,
       ingredients: prev.ingredients || (Array.isArray(food.ingredients_en || food.ingredients) ? (food.ingredients_en || food.ingredients).join(", ") : ""),
-      category: food.category?.toString() || prev.category,
+      category: food.category || prev.category,
       // If price is 0, set it to dish price (discount will be applied by the useEffect)
       price: prev.price === 0 ? food.price : prev.price
     }))
@@ -225,7 +225,7 @@ export function PromotionsTab() {
       }
 
       if (editingPromotion) {
-        const promotionId = parseInt(editingPromotion.id)
+        const promotionId = editingPromotion.id
         await api.patchFormData(`/promotions/${promotionId}/`, formDataToSend)
         toast.success("Aksiya muvaffaqiyatli yangilandi")
       } else {
@@ -264,31 +264,31 @@ export function PromotionsTab() {
 
     // Determine initial discount type
     let initialDiscountType: "percentage" | "amount" | "none" = "none"
-    if (promotion.discount_percentage > 0) initialDiscountType = "percentage"
-    else if (promotion.discount_amount > 0) initialDiscountType = "amount"
+    if ((promotion.discount_percentage ?? 0) > 0) initialDiscountType = "percentage"
+    else if ((promotion.discount_amount ?? 0) > 0) initialDiscountType = "amount"
 
     setDiscountType(initialDiscountType)
 
     setFormData({
       title: promotion.title,
       description: promotion.description,
-      image: promotion.image,
+      image: promotion.image || "",
       imageFile: null,
       discount_percentage: promotion.discount_percentage || 0,
       discount_amount: promotion.discount_amount || 0,
       is_active: promotion.is_active !== false,
       start_date: formatDateForInput(promotion.start_date || ""),
       end_date: formatDateForInput(promotion.end_date || ""),
-      category: promotion.category?.toString() || "none",
-      linked_dish: promotion.linked_dish?.toString() || "none",
+      category: (promotion.category || 0).toString(),
+      linked_dish: (promotion.linked_dish || 0).toString(),
       price: promotion.price || 0,
       ingredients: Array.isArray(promotion.ingredients) ? promotion.ingredients.join(", ") : "",
     })
     setMultilingualData({
-      title_uz: promotion.title_uz || promotion.titleUz || "",
-      title_ru: promotion.title_ru || promotion.titleRu || "",
-      description_uz: promotion.description_uz || promotion.descriptionUz || "",
-      description_ru: promotion.description_ru || promotion.descriptionRu || "",
+      title_uz: promotion.title_uz || "",
+      title_ru: promotion.title_ru || "",
+      description_uz: promotion.description_uz || "",
+      description_ru: promotion.description_ru || "",
       ingredients_uz: Array.isArray(promotion.ingredients_uz) ? promotion.ingredients_uz.join(", ") : "",
       ingredients_ru: Array.isArray(promotion.ingredients_ru) ? promotion.ingredients_ru.join(", ") : "",
     })
@@ -305,7 +305,7 @@ export function PromotionsTab() {
     if (promotionToDelete) {
       setDeletingPromotionId(promotionToDelete.id)
       try {
-        const promotionId = parseInt(promotionToDelete.id)
+        const promotionId = promotionToDelete.id
 
         await api.delete(`/promotions/${promotionId}/`)
 
@@ -491,7 +491,7 @@ export function PromotionsTab() {
                               min="0"
                               max="100"
                               value={formData.discount_percentage || ""}
-                              onChange={(e) => setFormData({ ...formData, discount_percentage: Number.parseInt(e.target.value) || 0 })}
+                              onChange={(e) => setFormData({ ...formData, discount_percentage: parseInt(e.target.value) || 0 })}
                               className="bg-slate-900 border-emerald-500/50 focus:border-emerald-500 text-white pl-9"
                               placeholder="20"
                             />
@@ -508,7 +508,7 @@ export function PromotionsTab() {
                               type="number"
                               min="0"
                               value={formData.discount_amount || ""}
-                              onChange={(e) => setFormData({ ...formData, discount_amount: Number.parseInt(e.target.value) || 0 })}
+                              onChange={(e) => setFormData({ ...formData, discount_amount: parseInt(e.target.value) || 0 })}
                               className="bg-slate-900 border-green-500/50 focus:border-green-500 text-white pl-9"
                               placeholder="5000"
                             />
@@ -785,12 +785,12 @@ export function PromotionsTab() {
               <div className="relative h-40">
                 <Image
                   src={promotion.image || "/placeholder.svg"}
-                  alt={promotion.titleUz || "Aksiya rasmi"}
+                  alt={promotion.title_uz || "Aksiya rasmi"}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
-                {promotion.active && (
+                {promotion.is_active && (
                   <div className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
                     Faol
                   </div>
@@ -799,14 +799,14 @@ export function PromotionsTab() {
               <div className="p-4">
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h3 className="text-lg font-bold text-white">{promotion.titleUz}</h3>
-                    <p className="text-sm text-white/60 mb-2">{promotion.descriptionUz}</p>
+                    <h3 className="text-lg font-bold text-white">{promotion.title_uz}</h3>
+                    <p className="text-sm text-white/60 mb-2">{promotion.description_uz}</p>
                     <div className="text-emerald-400 font-bold text-lg">
-                      {promotion.discount_percentage > 0 && (
+                      {(promotion.discount_percentage ?? 0) > 0 && (
                         <p>{promotion.discount_percentage}% chegirma</p>
                       )}
-                      {promotion.discount_percentage === 0 && promotion.discount_amount > 0 && (
-                        <p>{formatPrice(promotion.discount_amount)} chegirma</p>
+                      {(promotion.discount_percentage ?? 0) === 0 && (promotion.discount_amount ?? 0) > 0 && (
+                        <p>{formatPrice(promotion.discount_amount ?? 0)} chegirma</p>
                       )}
                       {promotion.price > 0 && (
                         <p>Narx: {formatPrice(promotion.price)}</p>
@@ -844,7 +844,7 @@ export function PromotionsTab() {
           <AlertDialogHeader>
             <AlertDialogTitle className="text-white text-lg">Aksiyani o'chirish</AlertDialogTitle>
             <AlertDialogDescription className="text-gray-300">
-              Siz haqiqatan ham <strong>"{promotionToDelete?.titleUz}"</strong> aksiyasini o'chirishni xohlaysizmi?
+              Siz haqiqatan ham <strong>"{promotionToDelete?.title_uz}"</strong> aksiyasini o'chirishni xohlaysizmi?
               <br />
               <span className="text-red-400 text-sm mt-2 block">
                 ⚠️ Bu amalni qaytarib bo'lmaydi!

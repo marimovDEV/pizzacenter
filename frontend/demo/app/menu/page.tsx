@@ -20,7 +20,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react"
-import { categories, menuItems, formatPrice, type MenuItem, type CartItem } from "@/lib/restaurant-data"
+import { categories, menuItems, formatPrice, type MenuItem, type CartItem } from "@/demo/lib/restaurant-data"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 const promotions = [
@@ -169,7 +169,7 @@ export default function MenuPage() {
     if (newQuantity <= 0) {
       setCart((prev) => prev.filter((item) => item.id !== itemId))
     } else {
-      setCart((prev) => prev.map((item) => (item.id === itemId ? { ...item, quantity: newQuantity } : item)))
+      setCart((prev) => prev.map((item: any) => (item.id === itemId ? { ...item, quantity: newQuantity } : item)))
     }
   }
 
@@ -405,7 +405,7 @@ export default function MenuPage() {
                 className="flex transition-transform duration-700 ease-out"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
-                {promotions.map((promotion) => (
+                {promotions.map((promotion: any) => (
                   <div key={promotion.id} className="min-w-full relative">
                     <div className="aspect-[16/7] md:aspect-[21/9] relative overflow-hidden">
                       <img
@@ -473,7 +473,7 @@ export default function MenuPage() {
       <div className="container mx-auto px-4 py-6 pb-32">
         {viewMode === "categories" && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {categories.map((category) => (
+            {categories.map((category: any) => (
               <Card
                 key={category.id}
                 className="menu-card hover:shadow-xl transition-all duration-300 cursor-pointer border-0 shadow-md bg-card/80 backdrop-blur-sm rounded-2xl overflow-hidden group"
@@ -513,7 +513,7 @@ export default function MenuPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {filteredItems.map((item) => (
+              {filteredItems.map((item: any) => (
                 <Card
                   key={item.id}
                   className="menu-card hover:shadow-2xl transition-all duration-300 cursor-pointer border-0 shadow-lg bg-card/80 backdrop-blur-sm rounded-3xl overflow-hidden"

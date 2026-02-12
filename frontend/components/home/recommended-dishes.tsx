@@ -39,8 +39,8 @@ export function RecommendedDishesSection() {
         // Enrich menuItems with promotion data
         const enrichedItems = menuItems.map(item => {
             const activePromo = promotions.find(p =>
-                p.active &&
-                p.menu_items?.some(miId => miId === item.id)
+                p.is_active &&
+                (p.linked_dish === item.id)
             )
 
             if (activePromo) {

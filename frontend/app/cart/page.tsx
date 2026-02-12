@@ -28,20 +28,20 @@ export default function CartPage() {
   }
 
   const getName = (item: (typeof cart)[0]["menuItem"]) => {
-    if (language === "uz") return item.name_uz || item.nameUz || item.name
-    if (language === "ru") return item.name_ru || item.nameRu || item.name
+    if (language === "uz") return item.name_uz || item.name
+    if (language === "ru") return item.name_ru || item.name
     return item.name
   }
 
   const getDescription = (item: (typeof cart)[0]["menuItem"]) => {
-    if (language === "uz") return item.description_uz || item.descriptionUz || item.description
-    if (language === "ru") return item.description_ru || item.descriptionRu || item.description
+    if (language === "uz") return item.description_uz || item.description
+    if (language === "ru") return item.description_ru || item.description
     return item.description
   }
 
   const getIngredients = (item: (typeof cart)[0]["menuItem"]) => {
-    if (language === "uz") return item.ingredients_uz || item.ingredientsUz || item.ingredients
-    if (language === "ru") return item.ingredients_ru || item.ingredientsRu || item.ingredients
+    if (language === "uz") return item.ingredients_uz || item.ingredients
+    if (language === "ru") return item.ingredients_ru || item.ingredients
     return item.ingredients
   }
 

@@ -866,7 +866,7 @@ export const updateOrderStatus = (orderId: string, status: Order["status"]) => {
   const orderIndex = orders.findIndex((o) => o.id === orderId)
   if (orderIndex !== -1) {
     orders[orderIndex].status = status
-    localStorage.setItem("restaurant-orders", JSON.JSON.stringify(orders))
+    localStorage.setItem("restaurant-orders", JSON.stringify(orders))
   }
 }
 

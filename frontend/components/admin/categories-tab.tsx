@@ -30,7 +30,7 @@ export function CategoriesTab() {
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [deletingCategoryId, setDeletingCategoryId] = useState<string | null>(null)
+  const [deletingCategoryId, setDeletingCategoryId] = useState<number | null>(null)
 
   // Filter & Sort
   const [searchQuery, setSearchQuery] = useState("")
@@ -107,7 +107,7 @@ export function CategoriesTab() {
       let successMessage = ""
 
       if (editingCategory) {
-        const categoryId = parseInt(editingCategory.id)
+        const categoryId = editingCategory.id
         await api.patch(`/categories/${categoryId}/`, categoryData)
         successMessage = "Kategoriya yangilandi"
       } else {
@@ -151,7 +151,7 @@ export function CategoriesTab() {
       setIsDeleting(true)
       setDeletingCategoryId(categoryToDelete.id)
       try {
-        const categoryId = parseInt(categoryToDelete.id)
+        const categoryId = categoryToDelete.id
 
         // Check local existence first
         const currentCategory = categories.find(cat => cat.id === categoryToDelete.id)
@@ -465,10 +465,10 @@ export function CategoriesTab() {
                     <span>
                       {(() => {
                         if (!menuItems || !Array.isArray(menuItems)) return 0
-                        const categoryId = typeof category.id === 'number' ? category.id : parseInt(String(category.id))
+                        const categoryId = category.id
                         return menuItems.filter((item) => {
                           if (!item || !item.category) return false
-                          const itemCategoryId = typeof item.category === 'number' ? item.category : parseInt(String(item.category))
+                          const itemCategoryId = item.category
                           return itemCategoryId === categoryId
                         }).length
                       })()} ta mahsulot

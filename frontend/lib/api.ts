@@ -1,239 +1,33 @@
+import {
+  MenuItem,
+  Category,
+  Order,
+  Cart,
+  Promotion,
+  Review,
+  Feedback,
+  SiteSettings,
+  RestaurantInfo,
+  TextContent,
+  FeaturedDish
+} from './types';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
-export interface MenuItem {
-  id: number;
-  name: string;
-  name_uz: string;
-  name_ru: string;
-  description: string;
-  description_uz: string;
-  description_ru: string;
-  price: number;
-  image?: string;
-  image_thumbnail?: string;
-  image_mobile?: string;
-  category: number;
-  category_name: string;
-  category_name_uz: string;
-  category_name_ru: string;
-  available: boolean;
-  prep_time?: string;
-  rating?: number;
-  ingredients: string[];
-  ingredients_uz: string[];
-  ingredients_ru: string[];
-  created_at: string;
-  updated_at: string;
-}
-
-export interface Category {
-  id: number;
-  name: string;
-  name_uz: string;
-  name_ru: string;
-  icon: string;
-  image?: string;
-  image_thumbnail?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-
-export interface Order {
-  id: number;
-  table_number: number;
-  customer_name?: string;
-  total: number;
-  status: "pending" | "preparing" | "ready" | "served" | "cancelled";
-  notes?: string;
-  created_at: string;
-  updated_at: string;
-  items: OrderItem[];
-}
-
-export interface OrderItem {
-  id: number;
-  menu_item: number;
-  menu_item_name: string;
-  menu_item_name_uz: string;
-  menu_item_name_ru: string;
-  quantity: number;
-  notes?: string;
-  price: number;
-  total_price: number;
-}
-
-export interface CartItem {
-  id: number;
-  menu_item: number;
-  menu_item_name: string;
-  menu_item_name_uz: string;
-  menu_item_name_ru: string;
-  menu_item_image?: string;
-  menu_item_price: number;
-  quantity: number;
-  notes?: string;
-  price: number;
-  total_price: number;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface Cart {
-  id: number;
-  session_key: string;
-  table_number?: number;
-  customer_name?: string;
-  notes?: string;
-  total_items: number;
-  total_price: number;
-  items: CartItem[];
-  created_at: string;
-  updated_at: string;
-}
-
-export interface Promotion {
-  id: number;
-  title: string;
-  title_uz: string;
-  title_ru: string;
-  description: string;
-  description_uz: string;
-  description_ru: string;
-  image?: string;
-  active: boolean;
-  link?: string;
-  category?: number;
-  category_name?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface FeaturedDish {
-  id: number;
-  menu_item: MenuItem;
-  order: number;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface Review {
-  id: number;
-  name: string;
-  surname: string;
-  comment: string;
-  rating: number;
-  date: string;
-  approved: boolean;
-  deleted: boolean;
-}
-
-export interface SiteSettings {
-  id: number;
-  site_name: string;
-  site_name_uz: string;
-  site_name_ru: string;
-  logo?: string;
-  favicon?: string;
-  phone: string;
-  email: string;
-  address: string;
-  address_uz: string;
-  address_ru: string;
-  working_hours: string;
-  working_hours_uz: string;
-  working_hours_ru: string;
-  facebook_url?: string;
-  instagram_url?: string;
-  telegram_url?: string;
-  meta_title?: string;
-  meta_description?: string;
-  meta_keywords?: string;
-  is_maintenance_mode: boolean;
-  maintenance_message?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface TextContent {
-  id: number;
-  content_type: string;
-  key: string;
-  title?: string;
-  subtitle?: string;
-  description?: string;
-  content?: string;
-  title_uz?: string;
-  subtitle_uz?: string;
-  description_uz?: string;
-  content_uz?: string;
-  title_ru?: string;
-  subtitle_ru?: string;
-  description_ru?: string;
-  content_ru?: string;
-  button_text?: string;
-  button_text_uz?: string;
-  button_text_ru?: string;
-  is_active: boolean;
-  order: number;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface RestaurantInfo {
-  id: number;
-  restaurant_name: string;
-  restaurant_name_uz: string;
-  restaurant_name_ru: string;
-  about_title: string;
-  about_title_uz: string;
-  about_title_ru: string;
-  about_description_1: string;
-  about_description_1_uz: string;
-  about_description_1_ru: string;
-  about_description_2: string;
-  about_description_2_uz: string;
-  about_description_2_ru: string;
-  hero_title: string;
-  hero_subtitle: string;
-  hero_subtitle_uz: string;
-  hero_subtitle_ru: string;
-  view_menu_button: string;
-  view_menu_button_uz: string;
-  view_menu_button_ru: string;
-  go_to_menu_button: string;
-  go_to_menu_button_uz: string;
-  go_to_menu_button_ru: string;
-  reviews_title: string;
-  reviews_title_uz: string;
-  reviews_title_ru: string;
-  leave_review_title: string;
-  leave_review_title_uz: string;
-  leave_review_title_ru: string;
-  first_name_label: string;
-  first_name_label_uz: string;
-  first_name_label_ru: string;
-  last_name_label: string;
-  last_name_label_uz: string;
-  last_name_label_ru: string;
-  comment_label: string;
-  comment_label_uz: string;
-  comment_label_ru: string;
-  rate_us_label: string;
-  rate_us_label_uz: string;
-  rate_us_label_ru: string;
-  submit_button: string;
-  submit_button_uz: string;
-  submit_button_ru: string;
-  no_reviews_text: string;
-  no_reviews_text_uz: string;
-  no_reviews_text_ru: string;
-  hero_image?: string;
-  about_image?: string;
-  created_at: string;
-  updated_at: string;
-}
+// Re-export types for convenience
+export type {
+  MenuItem,
+  Category,
+  Order,
+  Cart,
+  Promotion,
+  Review,
+  Feedback,
+  SiteSettings,
+  RestaurantInfo,
+  TextContent,
+  FeaturedDish
+};
 
 // API functions
 export class ApiClient {
@@ -275,7 +69,6 @@ export class ApiClient {
       const response = await fetch(url, {
         headers: {
           // Only set Content-Type for JSON requests, not for FormData
-          // For FormData, let browser set multipart/form-data with boundary
           ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
           ...(csrfToken && { 'X-CSRFToken': csrfToken }),
           ...options.headers,
@@ -295,7 +88,7 @@ export class ApiClient {
             errorMessage += ` - ${errorData}`;
           }
         } catch (e) {
-          // Ignore parsing errors for error message
+          // Ignore parsing errors
         }
 
         // Retry for server errors (5xx) or network issues
@@ -317,8 +110,11 @@ export class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
 
+      // Handle unknown error type in TS 4.4+
+      const err = error as Error;
+
       // Retry for network errors or timeouts
-      if (retries > 0 && (error.name === 'AbortError' || error.name === 'TypeError')) {
+      if (retries > 0 && (err.name === 'AbortError' || err.name === 'TypeError')) {
         console.warn(`Retrying request to ${endpoint}, attempts left: ${retries}`);
         await new Promise(resolve => setTimeout(resolve, 1000 * (3 - retries))); // Exponential backoff
         return this.request<T>(endpoint, options, parseJson, retries - 1);
@@ -340,17 +136,14 @@ export class ApiClient {
 
   async createCategory(category: Omit<Category, 'id' | 'created_at' | 'updated_at'> & { imageFile?: File }): Promise<Category> {
     const formData = new FormData();
-
-    // Add all text fields
     Object.entries(category).forEach(([key, value]) => {
-      if (key === 'imageFile') return; // Skip the file, we'll handle it separately
-      if (key === 'image' && !value) return; // Skip empty image field
+      if (key === 'imageFile') return;
+      if (key === 'image' && !value) return;
       if (value !== null && value !== undefined) {
         formData.append(key, value.toString());
       }
     });
 
-    // Add image file if provided
     if (category.imageFile) {
       formData.append('image', category.imageFile);
     }
@@ -363,17 +156,14 @@ export class ApiClient {
 
   async updateCategory(id: number, category: Partial<Omit<Category, 'id' | 'created_at' | 'updated_at'>> & { imageFile?: File }): Promise<Category> {
     const formData = new FormData();
-
-    // Add all text fields
     Object.entries(category).forEach(([key, value]) => {
-      if (key === 'imageFile') return; // Skip the file, we'll handle it separately
-      if (key === 'image' && !value) return; // Skip empty image field
+      if (key === 'imageFile') return;
+      if (key === 'image' && !value) return;
       if (value !== null && value !== undefined) {
         formData.append(key, value.toString());
       }
     });
 
-    // Add image file if provided
     if (category.imageFile) {
       formData.append('image', category.imageFile);
     }
@@ -402,11 +192,9 @@ export class ApiClient {
 
   async createMenuItem(menuItem: Omit<MenuItem, 'id' | 'created_at' | 'updated_at' | 'category_name' | 'category_name_uz' | 'category_name_ru'> & { imageFile?: File }): Promise<MenuItem> {
     const formData = new FormData();
-
-    // Add all text fields
     Object.entries(menuItem).forEach(([key, value]) => {
-      if (key === 'imageFile') return; // Skip the file, we'll handle it separately
-      if (key === 'image' && !value) return; // Skip empty image field
+      if (key === 'imageFile') return;
+      if (key === 'image' && !value) return;
       if (Array.isArray(value)) {
         formData.append(key, JSON.stringify(value));
       } else if (value !== null && value !== undefined) {
@@ -414,7 +202,6 @@ export class ApiClient {
       }
     });
 
-    // Add image file if provided
     if (menuItem.imageFile) {
       formData.append('image', menuItem.imageFile);
     }
@@ -427,11 +214,9 @@ export class ApiClient {
 
   async updateMenuItem(id: number, menuItem: Partial<Omit<MenuItem, 'id' | 'created_at' | 'updated_at' | 'category_name' | 'category_name_uz' | 'category_name_ru'>> & { imageFile?: File }): Promise<MenuItem> {
     const formData = new FormData();
-
-    // Add all text fields
     Object.entries(menuItem).forEach(([key, value]) => {
-      if (key === 'imageFile') return; // Skip the file, we'll handle it separately
-      if (key === 'image' && !value) return; // Skip empty image field
+      if (key === 'imageFile') return;
+      if (key === 'image' && !value) return;
       if (Array.isArray(value)) {
         formData.append(key, JSON.stringify(value));
       } else if (value !== null && value !== undefined) {
@@ -439,7 +224,6 @@ export class ApiClient {
       }
     });
 
-    // Add image file if provided
     if (menuItem.imageFile) {
       formData.append('image', menuItem.imageFile);
     }
@@ -481,17 +265,14 @@ export class ApiClient {
 
   async createPromotion(promotion: Omit<Promotion, 'id' | 'created_at' | 'updated_at' | 'category_name'> & { imageFile?: File }): Promise<Promotion> {
     const formData = new FormData();
-
-    // Add all text fields
     Object.entries(promotion).forEach(([key, value]) => {
-      if (key === 'imageFile') return; // Skip the file, we'll handle it separately
-      if (key === 'image' && !value) return; // Skip empty image field
+      if (key === 'imageFile') return;
+      if (key === 'image' && !value) return;
       if (value !== null && value !== undefined) {
         formData.append(key, value.toString());
       }
     });
 
-    // Add image file if provided
     if (promotion.imageFile) {
       formData.append('image', promotion.imageFile);
     }
@@ -504,17 +285,14 @@ export class ApiClient {
 
   async updatePromotion(id: number, promotion: Partial<Omit<Promotion, 'id' | 'created_at' | 'updated_at' | 'category_name'>> & { imageFile?: File }): Promise<Promotion> {
     const formData = new FormData();
-
-    // Add all text fields
     Object.entries(promotion).forEach(([key, value]) => {
-      if (key === 'imageFile') return; // Skip the file, we'll handle it separately
-      if (key === 'image' && !value) return; // Skip empty image field
+      if (key === 'imageFile') return;
+      if (key === 'image' && !value) return;
       if (value !== null && value !== undefined) {
         formData.append(key, value.toString());
       }
     });
 
-    // Add image file if provided
     if (promotion.imageFile) {
       formData.append('image', promotion.imageFile);
     }
@@ -531,22 +309,14 @@ export class ApiClient {
     });
   }
 
-  // Reviews
+  // Reviews & Feedback
   async getReviews(): Promise<Review[]> {
     const response = await this.request<{ results: Review[] }>('/reviews/');
     return response.results;
   }
 
-  async getAllReviews(): Promise<Review[]> {
-    const response = await this.request<{ results: Review[] }>('/admin/reviews/');
-    return response.results;
-  }
-
   async getAllFeedbacks(): Promise<Feedback[]> {
-    console.log('API Base URL:', this.baseUrl);
-    console.log('Making request to:', `${this.baseUrl}/feedback/`);
     const response = await this.request<{ results: Feedback[] }>('/feedback/');
-    console.log('API Response:', response);
     return response.results;
   }
 
@@ -580,28 +350,15 @@ export class ApiClient {
   async deleteReview(id: number): Promise<void> {
     await this.request<void>(`/reviews/${id}/`, {
       method: 'DELETE',
-    }, false); // Don't try to parse JSON for DELETE requests
-  }
-
-  // Review Actions
-  async getReviewActions(): Promise<any[]> {
-    const response = await this.request<{ results: any[] }>('/admin/review-actions/');
-    return response.results;
-  }
-
-  async deleteReviewAction(id: number): Promise<void> {
-    await this.request<void>(`/admin/review-actions/${id}/`, {
-      method: 'DELETE',
     }, false);
   }
 
-  // Cart Management
+  // Admin Carts & Orders
   async getAllCarts(): Promise<any[]> {
-    const response = await this.request<any[]>('/admin/carts/');
-    return response;
+    return this.request<any[]>('/admin/carts/');
   }
 
-  async clearCart(cartId?: number): Promise<void> {
+  async clearAdminCart(cartId?: number): Promise<void> {
     const url = cartId ? `/admin/carts/${cartId}/` : '/admin/carts/';
     await this.request<void>(url, {
       method: 'DELETE',
@@ -641,7 +398,7 @@ export class ApiClient {
     });
   }
 
-  // Stats
+  // Stats & Settings
   async getStats(): Promise<{
     total_categories: number;
     total_menu_items: number;
@@ -658,36 +415,21 @@ export class ApiClient {
     return response.results;
   }
 
-  // Site Settings
   async getSiteSettings(): Promise<SiteSettings> {
     return this.request<SiteSettings>('/site-settings/');
   }
 
-  // Text Content
-  async getTextContent(): Promise<TextContent[]> {
-    const response = await this.request<{ results: TextContent[] }>('/text-content/');
-    return response.results;
-  }
-
-  async getTextContentByType(contentType: string): Promise<TextContent[]> {
-    const response = await this.request<{ results: TextContent[] }>(`/text-content/type/${contentType}/`);
-    return response.results;
-  }
-
-  // Restaurant Info
   async getRestaurantInfo(): Promise<RestaurantInfo> {
     return this.request<RestaurantInfo>('/restaurant-info/');
   }
 
-  // Cart
+  // User Cart
   async getCart(): Promise<Cart> {
     try {
-      const response = await this.request<Cart>('/cart/');
-      return response;
+      return await this.request<Cart>('/cart/');
     } catch (error) {
-      console.error('Error fetching cart:', error);
-      // If cart not found, return empty cart
-      if (error.message && error.message.includes('404')) {
+      const err = error as Error;
+      if (err.message && err.message.includes('404')) {
         return {
           id: 0,
           session_key: '',
@@ -720,26 +462,16 @@ export class ApiClient {
     quantity?: number;
     notes?: string;
   }): Promise<Cart> {
-    try {
-      return await this.request<Cart>(`/cart/items/${itemId}/`, {
-        method: 'PATCH',
-        body: JSON.stringify(data),
-      });
-    } catch (error) {
-      console.error(`Error updating cart item ${itemId}:`, error);
-      throw error;
-    }
+    return this.request<Cart>(`/cart/items/${itemId}/`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
   }
 
   async removeFromCart(itemId: number): Promise<Cart> {
-    try {
-      return await this.request<Cart>(`/cart/items/${itemId}/`, {
-        method: 'DELETE',
-      });
-    } catch (error) {
-      console.error(`Error removing cart item ${itemId}:`, error);
-      throw error;
-    }
+    return this.request<Cart>(`/cart/items/${itemId}/`, {
+      method: 'DELETE',
+    });
   }
 
   async clearCart(): Promise<{ message: string }> {
@@ -760,93 +492,25 @@ export class ApiClient {
   }
 }
 
-// Create a default API client instance
 export const apiClient = new ApiClient();
 
-// Utility functions for formatting
+// Utils
 export const formatPrice = (price: number): string => {
-  // Convert to integer to remove decimal places
-  const integerPrice = Math.round(price);
-  return `${integerPrice.toLocaleString("uz-UZ")} so'm`;
+  return `${Math.round(price).toLocaleString("uz-UZ")} so'm`;
 };
 
 export const formatWeight = (weight: number): string => {
-  // Convert to integer to remove decimal places and add gram symbol
-  const integerWeight = Math.round(weight);
-  return `${integerWeight}г`;
+  return `${Math.round(weight)}г`;
 };
 
-// Utility function to get full image URL
 export const getImageUrl = (imagePath: string | null | undefined): string => {
   if (!imagePath) return '/placeholder.svg';
+  if (imagePath.startsWith('http')) return imagePath;
 
-  // If it's already a full URL, return as is
-  if (imagePath.startsWith('http')) {
-    return imagePath;
-  }
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+  const backendUrl = baseUrl.endsWith('/api') ? baseUrl.slice(0, -4) : baseUrl;
+  const path = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
 
-  // For development/production, use the env variable or default to local
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:8000';
-
-  // Ensure imagePath starts with /
-  if (!imagePath.startsWith('/')) {
-    imagePath = '/' + imagePath;
-  }
-
-  // Special handling for logo.png - try backend first, then fallback to Vercel
-  if (imagePath === '/logo.png') {
-    return `${backendUrl}/static/logo.png`;
-  }
-
-  const fullUrl = `${backendUrl}${imagePath}`;
-  console.log('Image URL constructed:', fullUrl);
-  return fullUrl;
-};
-
-// Local storage helpers for cart (frontend only)
-export const getStoredCart = (): CartItem[] => {
-  if (typeof window === "undefined") return [];
-  const stored = localStorage.getItem("restaurant-cart");
-  return stored ? JSON.parse(stored) : [];
-};
-
-export const saveCart = (cart: CartItem[]) => {
-  if (typeof window === "undefined") return;
-  localStorage.setItem("restaurant-cart", JSON.stringify(cart));
-};
-
-// Clear all session data (useful for debugging cart issues)
-export const clearSessionData = () => {
-  if (typeof window === "undefined") return;
-
-  // Clear localStorage
-  localStorage.removeItem("restaurant-cart");
-  localStorage.removeItem("restaurant-language");
-
-  // Clear sessionStorage
-  sessionStorage.clear();
-
-  console.log("Session data cleared - page will refresh to get new session");
-
-  // Refresh page to get new session
-  window.location.reload();
-};
-
-export const clearCart = () => {
-  if (typeof window === "undefined") return;
-  localStorage.removeItem("restaurant-cart");
-};
-
-// Order management functions
-export const getStoredOrders = (): Order[] => {
-  if (typeof window === "undefined") return [];
-  const stored = localStorage.getItem("restaurant-orders");
-  return stored ? JSON.parse(stored) : [];
-};
-
-export const saveOrder = (order: Order) => {
-  if (typeof window === "undefined") return;
-  const orders = getStoredOrders();
-  orders.push(order);
-  localStorage.setItem("restaurant-orders", JSON.stringify(orders));
+  if (path === '/logo.png') return `${backendUrl}/static/logo.png`;
+  return `${backendUrl}${path}`;
 };

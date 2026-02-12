@@ -12,121 +12,83 @@ interface MenuContextType {
   loading: boolean
   error: Error | null
   addCategory: (category: Category) => void
-  updateCategory: (id: string, category: Partial<Category>) => void
-  deleteCategory: (id: string) => void
+  updateCategory: (id: number, category: Partial<Category>) => void
+  deleteCategory: (id: number) => void
   addMenuItem: (item: MenuItem) => void
-  updateMenuItem: (id: string, item: Partial<MenuItem>) => void
-  deleteMenuItem: (id: string) => void
+  updateMenuItem: (id: number, item: Partial<MenuItem>) => void
+  deleteMenuItem: (id: number) => void
   addPromotion: (promotion: Promotion) => void
-  updatePromotion: (id: string, promotion: Partial<Promotion>) => void
-  deletePromotion: (id: string) => void
+  updatePromotion: (id: number, promotion: Partial<Promotion>) => void
+  deletePromotion: (id: number) => void
 }
 
 const MenuContext = createContext<MenuContextType | undefined>(undefined)
 
-// Sample data
+// Sample data (updated to match snake_case types)
 const sampleCategories: Category[] = [
   {
-    id: "1",
+    id: 1,
     name: "Sushi",
-    nameUz: "Sushi",
-    nameRu: "Суши",
+    name_uz: "Sushi",
+    name_ru: "Суши",
+    icon: "sushi",
     image: "/assorted-sushi-platter.png",
     order: 1,
-  },
-  {
-    id: "2",
-    name: "Ramen",
-    nameUz: "Ramen",
-    nameRu: "Рамен",
-    image: "/steaming-bowl-of-ramen.png",
-    order: 2,
-  },
-  {
-    id: "3",
-    name: "Tempura",
-    nameUz: "Tempura",
-    nameRu: "Темпура",
-    image: "/crispy-tempura.png",
-    order: 3,
-  },
+    is_active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
 ]
 
 const sampleMenuItems: MenuItem[] = [
   {
-    id: "1",
+    id: 1,
     name: "California Roll",
-    nameUz: "Kaliforniya Roll",
-    nameRu: "Калифорния Ролл",
+    name_uz: "Kaliforniya Roll",
+    name_ru: "Калифорния Ролл",
     description: "Classic sushi roll with crab, avocado, and cucumber",
-    descriptionUz: "Klassik sushi roll qisqichbaqa, avokado va bodring bilan",
-    descriptionRu: "Классический суши-ролл с крабом, авокадо и огурцом",
+    description_uz: "Klassik sushi roll qisqichbaqa, avokado va bodring bilan",
+    description_ru: "Классический суши-ролл с крабом, авокадо и огурцом",
     image: "/california-roll.png",
     price: 45000,
     weight: 250,
     ingredients: ["Crab", "Avocado", "Cucumber", "Rice", "Nori"],
-    ingredientsUz: ["Qisqichbaqa", "Avokado", "Bodring", "Guruch", "Nori"],
-    ingredientsRu: ["Краб", "Авокадо", "Огурец", "Рис", "Нори"],
+    ingredients_uz: ["Qisqichbaqa", "Avokado", "Bodring", "Guruch", "Nori"],
+    ingredients_ru: ["Краб", "Авокадо", "Огурец", "Рис", "Нори"],
     rating: 4.8,
-    prepTime: 15,
-    categoryId: "1",
+    prep_time: "15",
+    category: 1,
     available: true,
-  },
-  {
-    id: "2",
-    name: "Spicy Tuna Roll",
-    nameUz: "Achchiq Tuna Roll",
-    nameRu: "Острый ролл с тунцом",
-    description: "Fresh tuna with spicy mayo and cucumber",
-    descriptionUz: "Yangi tuna achchiq mayonez va bodring bilan",
-    descriptionRu: "Свежий тунец с острым майонезом и огурцом",
-    image: "/spicy-tuna-roll.png",
-    price: 55000,
-    weight: 280,
-    ingredients: ["Tuna", "Spicy Mayo", "Cucumber", "Rice", "Nori"],
-    ingredientsUz: ["Tuna", "Achchiq mayonez", "Bodring", "Guruch", "Nori"],
-    ingredientsRu: ["Тунец", "Острый майонез", "Огурец", "Рис", "Нори"],
-    rating: 4.9,
-    prepTime: 15,
-    categoryId: "1",
-    available: true,
-  },
-  {
-    id: "3",
-    name: "Tonkotsu Ramen",
-    nameUz: "Tonkotsu Ramen",
-    nameRu: "Тонкоцу Рамен",
-    description: "Rich pork bone broth with noodles and toppings",
-    descriptionUz: "Boy cho'chqa suyagi sho'rva noodles va qo'shimchalar bilan",
-    descriptionRu: "Насыщенный бульон из свиных костей с лапшой и топпингами",
-    image: "/tonkotsu-ramen.png",
-    price: 65000,
-    weight: 450,
-    ingredients: ["Pork Broth", "Noodles", "Pork Belly", "Egg", "Green Onion"],
-    ingredientsUz: ["Cho'chqa sho'rvasi", "Noodles", "Cho'chqa go'shti", "Tuxum", "Yashil piyoz"],
-    ingredientsRu: ["Свиной бульон", "Лапша", "Свиная грудинка", "Яйцо", "Зеленый лук"],
-    rating: 4.7,
-    prepTime: 25,
-    categoryId: "2",
-    available: true,
-  },
+    is_active: true,
+    global_order: 1,
+    category_order: 1,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
 ]
 
 const samplePromotions: Promotion[] = [
   {
-    id: "1",
+    id: 1,
     title: "Happy Hour Special",
-    titleUz: "Happy Hour Maxsus",
-    titleRu: "Счастливые часы",
+    title_uz: "Happy Hour Maxsus",
+    title_ru: "Счастливые часы",
     description: "20% off all sushi rolls from 2-5 PM",
-    descriptionUz: "Barcha sushi rollarga 14:00-17:00 oralig'ida 20% chegirma",
-    descriptionRu: "Скидка 20% на все суши-роллы с 14:00 до 17:00",
+    description_uz: "Barcha sushi rollarga 14:00-17:00 oralig'ida 20% chegirma",
+    description_ru: "Скидка 20% на все суши-роллы с 14:00 до 17:00",
     image: "/sushi-promotion.jpg",
-    discount: 20,
-    active: true,
-    startDate: "2025-01-01",
-    endDate: "2025-12-31",
-  },
+    discount_type: 'percent',
+    discount_percentage: 20,
+    price: 0,
+    is_active: true,
+    start_date: "2025-01-01",
+    end_date: "2025-12-31",
+    ingredients: [],
+    ingredients_uz: [],
+    ingredients_ru: [],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
 ]
 
 export function MenuProvider({ children }: { children: React.ReactNode }) {
@@ -145,12 +107,12 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
   const [promotions, setPromotions] = useState<Promotion[]>([])
 
   const loading = categoriesLoading || rawMenuItemsLoading || promotionsLoading
-  const error = categoriesError || rawMenuItemsError || promotionsError
+  const error = (categoriesError || rawMenuItemsError || promotionsError) as Error | null
 
   // API dan kelgan ma'lumotlarni saqlash
   useEffect(() => {
     if (apiCategories && Array.isArray(apiCategories)) {
-      setCategories(apiCategories as any)
+      setCategories(apiCategories)
     } else if (!categoriesLoading && apiCategories === null) {
       setCategories([])
     }
@@ -158,7 +120,7 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (apiMenuItems && Array.isArray(apiMenuItems)) {
-      const activeItems = (apiMenuItems as any).filter(
+      const activeItems = apiMenuItems.filter(
         (item: MenuItem) => item?.is_active !== false && item?.category !== null,
       )
       setMenuItems(activeItems)
@@ -174,7 +136,7 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (apiPromotions && Array.isArray(apiPromotions)) {
-      setPromotions(apiPromotions as any)
+      setPromotions(apiPromotions)
     } else if (!promotionsLoading && apiPromotions === null) {
       setPromotions([])
     }
@@ -183,49 +145,41 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
 
   const addCategory = (category: Category) => {
     setCategories((prev) => {
-      // Duplicate check by ID
       if (prev.some(cat => cat.id === category.id)) return prev;
       return [...prev, category].sort((a, b) => (a.order || 0) - (b.order || 0))
     })
-    // Refetch from API to ensure consistency with backend
     refetchCategories()
   }
 
-  const updateCategory = (id: string, updates: Partial<Category>) => {
+  const updateCategory = (id: number, updates: Partial<Category>) => {
     setCategories((prev) => prev.map((cat) => (cat.id === id ? { ...cat, ...updates } : cat)))
-    // Refetch from API to ensure consistency
     refetchCategories()
   }
 
-  const deleteCategory = (id: string) => {
+  const deleteCategory = (id: number) => {
     setCategories((prev) => prev.filter((cat) => cat.id !== id))
-    // Refetch from API to ensure consistency
     refetchCategories()
   }
 
   const addMenuItem = (item: MenuItem) => {
     setMenuItems((prev) => {
-      // Duplicate check
       if (prev.some(mi => mi.id === item.id)) return prev;
       return [...prev, item]
     })
-    // Refetch from API to ensure consistency
-    setTimeout(() => {
-      refetchMenuItems()
-    }, 500) // Slight delay to let backend process
-  }
-
-  const updateMenuItem = (id: string, updates: Partial<MenuItem>) => {
-    setMenuItems((prev) => prev.map((item) => (item.id === id ? { ...item, ...updates } : item)))
-    // Refetch from API to ensure consistency
     setTimeout(() => {
       refetchMenuItems()
     }, 500)
   }
 
-  const deleteMenuItem = (id: string) => {
+  const updateMenuItem = (id: number, updates: Partial<MenuItem>) => {
+    setMenuItems((prev) => prev.map((item) => (item.id === id ? { ...item, ...updates } : item)))
+    setTimeout(() => {
+      refetchMenuItems()
+    }, 500)
+  }
+
+  const deleteMenuItem = (id: number) => {
     setMenuItems((prev) => prev.filter((item) => item.id !== id))
-    // Refetch from API to ensure consistency
     setTimeout(() => {
       refetchMenuItems()
     }, 500)
@@ -236,19 +190,16 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
       if (prev.some(p => p.id === promotion.id)) return prev;
       return [...prev, promotion]
     })
-    // Refetch from API to ensure consistency
     refetchPromotions()
   }
 
-  const updatePromotion = (id: string, updates: Partial<Promotion>) => {
+  const updatePromotion = (id: number, updates: Partial<Promotion>) => {
     setPromotions((prev) => prev.map((promo) => (promo.id === id ? { ...promo, ...updates } : promo)))
-    // Refetch from API to ensure consistency
     refetchPromotions()
   }
 
-  const deletePromotion = (id: string) => {
+  const deletePromotion = (id: number) => {
     setPromotions((prev) => prev.filter((promo) => promo.id !== id))
-    // Refetch from API to ensure consistency
     refetchPromotions()
   }
 

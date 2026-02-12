@@ -63,9 +63,9 @@ export function PromotionsCarousel({ language }: PromotionsCarouselProps) {
       addPromotionToCart(currentPromotion)
 
       // Qo'shilgandan keyin linked_product'ga scroll qilish
-      if (currentPromotion.linked_product) {
+      if (currentPromotion.linked_dish) {
         setTimeout(() => {
-          const linkedProductId = currentPromotion.linked_product.toString()
+          const linkedProductId = currentPromotion.linked_dish?.toString()
           const productElement = document.querySelector(`[data-menu-item-id="${linkedProductId}"]`)
           if (productElement) {
             productElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -99,14 +99,14 @@ export function PromotionsCarousel({ language }: PromotionsCarouselProps) {
   }
 
   const getTitle = () => {
-    if (language === "uz") return currentPromotion.title_uz || currentPromotion.titleUz
-    if (language === "ru") return currentPromotion.title_ru || currentPromotion.titleRu
+    if (language === "uz") return currentPromotion.title_uz || currentPromotion.title
+    if (language === "ru") return currentPromotion.title_ru || currentPromotion.title
     return currentPromotion.title
   }
 
   const getDescription = () => {
-    if (language === "uz") return currentPromotion.description_uz || currentPromotion.descriptionUz
-    if (language === "ru") return currentPromotion.description_ru || currentPromotion.descriptionRu
+    if (language === "uz") return currentPromotion.description_uz || currentPromotion.description
+    if (language === "ru") return currentPromotion.description_ru || currentPromotion.description
     return currentPromotion.description
   }
 
@@ -140,12 +140,11 @@ export function PromotionsCarousel({ language }: PromotionsCarouselProps) {
               AKSIYA
             </div>
 
-            {(currentPromotion.discount_percentage > 0 || currentPromotion.discount_amount > 0) && (
+            {((currentPromotion.discount_percentage ?? 0) > 0 || (currentPromotion.discount_amount ?? 0) > 0) && (
               <div className="absolute top-4 left-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-3 py-1 rounded-full text-lg font-bold shadow-lg">
-                {currentPromotion.discount_percentage > 0 && `-${currentPromotion.discount_percentage}%`}
-                {currentPromotion.discount_percentage === 0 && currentPromotion.discount_amount > 0 &&
-                  `-${formatPrice(currentPromotion.discount_amount)}`
-                }
+                {(currentPromotion.discount_percentage ?? 0) > 0 && `-${currentPromotion.discount_percentage}%`}
+                {(currentPromotion.discount_percentage ?? 0) === 0 && (currentPromotion.discount_amount ?? 0) > 0 &&
+                  `-${formatPrice(currentPromotion.discount_amount ?? 0)}`}
               </div>
             )}
 
