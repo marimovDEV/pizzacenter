@@ -15,9 +15,7 @@ import type { Language, MenuItem } from "@/lib/types"
 import { PromotionsCarousel } from "@/components/promotions-carousel"
 import { CartSheet } from "@/components/cart-sheet"
 import { MenuGridSkeleton } from "@/components/menu-skeleton"
-// @ts-ignore
-import { FixedSizeList } from "react-window"
-const List = FixedSizeList as any
+import { List } from "react-window"
 
 // --- Constants & Helper Components ---
 
@@ -36,8 +34,7 @@ function useWindowSize() {
 
 
 
-const Row = ({ index, style, data }: { index: number; style: any; data: any }) => {
-  const { items, language, columnCount, gridGap } = data
+const Row = ({ index, style, items, language, columnCount, gridGap }: any) => {
   const rowItems = []
   for (let i = 0; i < columnCount; i++) {
     const itemIndex = index * columnCount + i
@@ -93,15 +90,13 @@ function MenuVirtualGrid({ items, language }: MenuVirtualGridProps) {
 
   return (
     <List
-      height={totalHeight}
-      itemCount={rowCount}
-      itemSize={rowHeightValue}
-      width="100%"
-      itemData={{ items, language, columnCount, gridGap } as any}
+      rowCount={rowCount}
+      rowHeight={rowHeightValue}
+      rowProps={{ items, language, columnCount, gridGap }}
+      rowComponent={Row}
+      style={{ height: totalHeight, width: "100%" }}
       className="scrollbar-hide"
-    >
-      {Row}
-    </List>
+    />
   )
 }
 
