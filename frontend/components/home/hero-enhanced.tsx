@@ -26,6 +26,7 @@ const translations = {
     },
 }
 
+import Image from "next/image"
 import { SITE_CONFIG } from "@/lib/site-config"
 
 export function HeroEnhanced() {
@@ -33,17 +34,20 @@ export function HeroEnhanced() {
     const t = translations[language]
 
     return (
-        <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-            {/* Background Image */}
-            <div
-                className="absolute inset-0 z-0"
-                style={{
-                    backgroundImage: "url(/hero_background.jpg)",
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
-                }}
-            >
-                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-slate-900" />
+        <section className="relative min-h-[90vh] min-h-[90dvh] flex items-center justify-center overflow-hidden">
+            {/* Background Image - Optimized with Next.js Image */}
+            <div className="absolute inset-0 z-0">
+                <Image
+                    src="/hero_background.jpg"
+                    alt="Pizza Center Garden"
+                    fill
+                    priority
+                    className="object-cover object-center"
+                    sizes="100vw"
+                />
+                {/* Gradient Overlays */}
+                <div className="absolute inset-0 bg-black/60 md:bg-black/50" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900" />
             </div>
 
             <div className="container relative z-10 px-4 text-center max-w-4xl mx-auto pt-20">
