@@ -68,16 +68,16 @@ export function ProductModal({ item, isOpen, onClose, language }: ProductModalPr
     }
 
     return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-0 md:p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-0 md:p-4 bg-black/90 backdrop-blur-2xl animate-in fade-in duration-300">
             <div
-                className="absolute inset-0 bg-slate-950/40"
+                className="absolute inset-0 bg-slate-950/20"
                 onClick={onClose}
             />
-            <div className="relative bg-slate-900 md:bg-gradient-to-b md:from-slate-900 md:via-slate-800 md:to-slate-900 rounded-t-3xl md:rounded-3xl overflow-hidden border-t md:border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)] max-w-lg w-full max-h-[92vh] flex flex-col mt-auto md:mt-0 animate-in zoom-in-95 slide-in-from-bottom-10 duration-300 ease-out">
+            <div className="relative bg-slate-900 md:bg-gradient-to-b md:from-slate-900 md:via-slate-800 md:to-slate-900 rounded-t-3xl md:rounded-3xl overflow-hidden border-t md:border border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.8)] max-w-lg w-full max-h-[92vh] flex flex-col mt-auto md:mt-0 animate-in zoom-in-95 slide-in-from-bottom-10 duration-300 ease-out">
                 {/* Close Button - More accessible on mobile */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center transition-all text-white border border-white/10 active:scale-95"
+                    className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-black/80 backdrop-blur-xl flex items-center justify-center transition-all text-white border border-white/20 active:scale-95 shadow-lg"
                 >
                     <X className="w-5 h-5" />
                 </button>
