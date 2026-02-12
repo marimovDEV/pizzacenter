@@ -91,48 +91,48 @@ export function ProductModal({ item, isOpen, onClose, language }: ProductModalPr
                     </div>
                 </div>
 
-                {/* Content Section */}
-                <div className="p-6 md:p-8 -mt-10 relative">
-                    {/* Header Info */}
-                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+                {/* Content Section - Tightened */}
+                <div className="p-5 md:p-6 -mt-8 relative">
+                    {/* Header Info - Tightened */}
+                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-4">
                         <div>
-                            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">{getName()}</h2>
-                            <div className="flex flex-wrap gap-3">
+                            <h2 className="text-xl md:text-2xl font-bold text-white mb-1">{getName()}</h2>
+                            <div className="flex flex-wrap gap-2">
                                 {item.weight && item.weight > 0 && (
-                                    <div className="flex items-center gap-1.5 text-gray-400 text-sm bg-white/5 px-3 py-1 rounded-full">
-                                        <Weight className="w-4 h-4" />
+                                    <div className="flex items-center gap-1.5 text-white/40 text-[10px] md:text-xs bg-white/5 px-2 py-0.5 rounded-full">
+                                        <Weight className="w-3 h-3" />
                                         <span>{formatWeight(item.weight)}</span>
                                     </div>
                                 )}
                                 {item.prep_time && (
-                                    <div className="flex items-center gap-1.5 text-gray-400 text-sm bg-white/5 px-3 py-1 rounded-full">
-                                        <Clock className="w-4 h-4" />
+                                    <div className="flex items-center gap-1.5 text-white/40 text-[10px] md:text-xs bg-white/5 px-2 py-0.5 rounded-full">
+                                        <Clock className="w-3 h-3" />
                                         <span>{item.prep_time} min</span>
                                     </div>
                                 )}
                             </div>
                         </div>
-                        <div className="text-2xl md:text-3xl font-bold text-emerald-400">
+                        <div className="text-xl md:text-2xl font-black text-emerald-400">
                             {formatPrice(item.price)}
                         </div>
                     </div>
 
-                    {/* Description */}
-                    <p className="text-gray-300 text-base md:text-lg mb-8 leading-relaxed">
+                    {/* Description - Compact */}
+                    <p className="text-white/60 text-sm md:text-base mb-6 leading-relaxed line-clamp-4">
                         {getDescription()}
                     </p>
 
-                    {/* Ingredients */}
+                    {/* Ingredients - Dense */}
                     {getIngredients().length > 0 && (
-                        <div className="mb-8">
-                            <h3 className="text-lg font-semibold text-white mb-4">
+                        <div className="mb-6">
+                            <h3 className="text-sm font-bold text-white/80 mb-3">
                                 {language === "uz" ? "Tarkibi" : language === "ru" ? "Состав" : "Ingredients"}
                             </h3>
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex flex-wrap gap-1.5">
                                 {getIngredients().map((ingredient, index) => (
                                     <span
                                         key={index}
-                                        className="text-sm bg-white/10 text-white px-3 py-1.5 rounded-full border border-white/5"
+                                        className="text-[10px] md:text-xs bg-white/5 text-white/50 px-2 py-1 rounded-md border border-white/5"
                                     >
                                         {ingredient}
                                     </span>
@@ -141,31 +141,30 @@ export function ProductModal({ item, isOpen, onClose, language }: ProductModalPr
                         </div>
                     )}
 
-                    {/* Action Bar */}
-                    <div className="pt-6 border-t border-white/10">
+                    {/* Action Bar - Balanced */}
+                    <div className="pt-5 border-t border-white/5">
                         {cartQuantity === 0 ? (
                             <Button
                                 onClick={handleAddToCart}
                                 disabled={!item.available}
-                                className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl h-14 text-lg font-bold shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-3 transition-all active:scale-[0.98]"
+                                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl h-12 text-base font-bold shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
                             >
                                 <ShoppingCart className="w-5 h-5" />
                                 {language === "uz" ? "Savatga qo'shish" : language === "ru" ? "Добавить в корзину" : "Add to Cart"}
-                                <span className="ml-2 opacity-80 font-normal">| {formatPrice(item.price)}</span>
                             </Button>
                         ) : (
-                            <div className="flex items-center justify-between bg-white/5 rounded-xl p-2 border border-white/10">
+                            <div className="flex items-center justify-between bg-white/5 rounded-xl p-1 border border-white/5">
                                 <Button
                                     size="icon"
                                     variant="ghost"
                                     onClick={handleDecrement}
-                                    className="h-12 w-12 rounded-lg hover:bg-white/10 text-white transition-all"
+                                    className="h-10 w-10 rounded-lg hover:bg-white/10 text-white transition-all"
                                 >
-                                    <Minus className="w-6 h-6" />
+                                    <Minus className="w-5 h-5" />
                                 </Button>
                                 <div className="flex flex-col items-center">
-                                    <span className="text-white font-bold text-xl">{cartQuantity}</span>
-                                    <span className="text-xs text-gray-400">
+                                    <span className="text-white font-black text-lg">{cartQuantity}</span>
+                                    <span className="text-[10px] text-emerald-400/60 font-medium">
                                         {formatPrice(item.price * cartQuantity)}
                                     </span>
                                 </div>
@@ -173,9 +172,9 @@ export function ProductModal({ item, isOpen, onClose, language }: ProductModalPr
                                     size="icon"
                                     variant="ghost"
                                     onClick={handleIncrement}
-                                    className="h-12 w-12 rounded-lg hover:bg-white/10 text-white transition-all"
+                                    className="h-10 w-10 rounded-lg hover:bg-white/10 text-white transition-all"
                                 >
-                                    <Plus className="w-6 h-6" />
+                                    <Plus className="w-5 h-5" />
                                 </Button>
                             </div>
                         )}
