@@ -81,12 +81,12 @@ function MenuVirtualGrid({ items, language }: MenuVirtualGridProps) {
   const columnCount = width < 768 ? 2 : width < 1024 ? 3 : 4
   const rowCount = Math.ceil(items.length / columnCount)
 
-  // Item dimensions
-  const rowHeightValue = width < 768 ? 320 : 450
-  const gridGap = width < 768 ? 12 : 24
+  // Item dimensions - Optimized for Tokyo density
+  const rowHeightValue = width < 768 ? 280 : 380
+  const gridGap = width < 768 ? 8 : 16
 
   // Calculate total height to avoid scrollbar issues
-  const totalHeight = typeof window !== "undefined" ? window.innerHeight - 250 : 800
+  const totalHeight = typeof window !== "undefined" ? window.innerHeight - 200 : 800
 
   return (
     <List
@@ -240,16 +240,20 @@ export default function MenuPage() {
     return items
   }, [menuItems, selectedCategory, searchQuery, loading, categories])
 
+  // Scroll to top when category changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }, [selectedCategory])
+
   const totalCartItems = getTotalItems()
 
   // Loading holati
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 pb-24">
-        <div className="fixed inset-0 bg-[url('/hero_background.jpg')] bg-cover bg-center bg-fixed opacity-40 pointer-events-none" />
-        <div className="relative z-10 container mx-auto px-3 md:px-4 py-4 md:py-8">
-          {/* Header Skeleton or simple spacing */}
-          <div className="h-20 mb-8" />
+      <main className="min-h-screen bg-slate-900 pb-20">
+        <div className="fixed inset-0 bg-[url('/hero_background.jpg')] bg-cover bg-center bg-fixed opacity-10 pointer-events-none" />
+        <div className="relative z-10 container mx-auto px-3 md:px-4 py-4 md:py-6">
+          <div className="h-16 mb-6" />
           <MenuGridSkeleton />
         </div>
       </main>
@@ -257,29 +261,29 @@ export default function MenuPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 pb-24">
+    <main className="min-h-screen bg-slate-900 pb-[70px]">
       <div className="fixed inset-0 bg-[url('/hero_background.jpg')] bg-cover bg-center bg-fixed opacity-10 pointer-events-none" />
 
-      <div className="relative z-10 container mx-auto px-3 md:px-4 py-4 md:py-8">
-        {/* Header */}
-        <header className="flex items-center justify-between gap-2 md:gap-4 mb-6 md:mb-8">
-          <div className="flex items-center gap-2 md:gap-4">
+      <div className="relative z-10 container mx-auto px-3 md:px-4 py-4 md:py-6">
+        {/* Header - Simplified */}
+        <header className="flex items-center justify-between gap-2 mb-6">
+          <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 backdrop-blur-xl flex items-center justify-center hover:bg-white/30 transition-all border border-white/30"
+              className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-white/20 transition-all border border-white/10"
             >
-              <ArrowLeft className="w-4 h-4 md:w-6 md:h-6 text-white" />
+              <ArrowLeft className="w-5 h-5 text-white" />
             </Link>
-            <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-white">Menu</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-white">Menu</h1>
           </div>
 
-          <div className="flex items-center gap-2 md:gap-4">
-            <div className="flex gap-1 md:gap-1 bg-white/10 backdrop-blur-xl rounded-full p-1 border border-white/20">
+          <div className="flex items-center gap-3">
+            <div className="flex bg-white/5 backdrop-blur-md rounded-lg p-1 border border-white/10">
               {(["uz", "ru", "en"] as Language[]).map((lang) => (
                 <button
                   key={lang}
                   onClick={() => setLanguage(lang)}
-                  className={`px-2 md:px-3 py-1 md:py-1.5 rounded-full text-xs md:text-sm font-medium transition-all ${language === lang ? "bg-white text-slate-900" : "text-white/70 hover:text-white"
+                  className={`px-2 py-1 rounded-md text-[10px] md:text-xs font-medium transition-all ${language === lang ? "bg-white text-slate-900" : "text-white/60 hover:text-white"
                     }`}
                 >
                   {lang.toUpperCase()}
@@ -288,10 +292,10 @@ export default function MenuPage() {
             </div>
 
             <CartSheet language={language}>
-              <Button variant="ghost" size="icon" className="text-white relative">
-                <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
+              <Button variant="ghost" size="icon" className="text-white relative w-10 h-10">
+                <ShoppingCart className="w-5 h-5" />
                 {totalCartItems > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full text-[10px] font-bold flex items-center justify-center text-white">
+                  <span className="absolute top-0 right-0 w-4 h-4 bg-emerald-500 rounded-full text-[10px] font-bold flex items-center justify-center text-white">
                     {totalCartItems}
                   </span>
                 )}
@@ -302,30 +306,30 @@ export default function MenuPage() {
 
         <PromotionsCarousel language={language} />
 
-        {/* Search */}
-        <div className="mb-6 md:mb-8 px-2 md:px-0">
+        {/* Search - Tightened */}
+        <div className="mb-6 px-1 md:px-0">
           <div className="relative">
-            <Search className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-white/60" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
             <Input
               placeholder={
-                language === "uz" ? "Mahsulot nomini yozing (masalan: Lavash)..." : language === "ru" ? "Введите название блюда (например: Лаваш)..." : "Type dish name (e.g. Lavash)..."
+                language === "uz" ? "Qidirish..." : language === "ru" ? "Поиск..." : "Search..."
               }
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 md:pl-12 bg-white/10 backdrop-blur-xl border-white/30 text-white placeholder:text-white/60 h-12 md:h-14 rounded-xl md:rounded-2xl text-sm md:text-base"
+              className="pl-9 bg-white/5 backdrop-blur-md border-white/10 text-white placeholder:text-white/40 h-10 rounded-lg text-sm"
             />
           </div>
         </div>
 
-        {/* Category Filter */}
-        <div className="sticky top-0 z-40 bg-transparent backdrop-blur-sm py-4 -mx-2 px-2 md:-mx-4 md:px-4 mb-6 md:mb-8 transition-all border-b border-white/5">
-          <nav className="flex gap-2 md:gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-emerald-500/20 scrollbar-track-transparent">
+        {/* Category Filter - Sticky & Dense */}
+        <div className="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md py-3 -mx-3 px-3 md:-mx-4 md:px-4 mb-6 border-b border-white/5">
+          <nav className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             <Button
               onClick={() => setSelectedCategory(null)}
               variant={selectedCategory === null ? "default" : "outline"}
-              className={`rounded-full whitespace-nowrap text-xs md:text-sm px-3 md:px-4 py-2 md:py-2.5 ${selectedCategory === null
-                ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white"
-                : "bg-white/10 backdrop-blur-xl border-white/30 text-white hover:bg-white/20"
+              className={`rounded-full h-8 whitespace-nowrap text-xs px-4 ${selectedCategory === null
+                ? "bg-emerald-500 text-white"
+                : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
                 }`}
             >
               {language === "uz" ? "Hammasi" : language === "ru" ? "Все" : "All"}
@@ -337,9 +341,9 @@ export default function MenuPage() {
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
                   variant={selectedCategory === category.id ? "default" : "outline"}
-                  className={`rounded-full whitespace-nowrap text-xs md:text-sm px-3 md:px-4 py-2 md:py-2.5 ${selectedCategory === category.id
-                    ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white"
-                    : "bg-white/10 backdrop-blur-xl border-white/30 text-white hover:bg-white/20"
+                  className={`rounded-full h-8 whitespace-nowrap text-xs px-4 ${selectedCategory === category.id
+                    ? "bg-emerald-500 text-white"
+                    : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
                     }`}
                 >
                   {language === "uz" ? category.name_uz : language === "ru" ? category.name_ru : category.name}
@@ -348,8 +352,8 @@ export default function MenuPage() {
           </nav>
         </div>
 
-        {/* Menu Items Grid - Optimized with Virtual Scrolling */}
-        <section id="menu-grid" className="max-w-7xl mx-auto px-2 md:px-0">
+        {/* Menu Items Grid - Denser */}
+        <section id="menu-grid" className="max-w-7xl mx-auto">
           <MenuVirtualGrid
             items={filteredItems}
             language={language}
@@ -358,8 +362,8 @@ export default function MenuPage() {
 
         {
           filteredItems.length === 0 && !loading && (
-            <div className="text-center py-16">
-              <p className="text-white/60 text-lg">
+            <div className="text-center py-12">
+              <p className="text-white/40 text-sm">
                 {language === "uz" ? "Hech narsa topilmadi" : language === "ru" ? "Ничего не найдено" : "No items found"}
               </p>
             </div>
@@ -367,17 +371,20 @@ export default function MenuPage() {
         }
       </div >
 
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+      {/* Fixed bottom cart - Exact height 70px matching padding-bottom */}
+      <div className="fixed bottom-0 left-0 right-0 h-[70px] flex items-center justify-center px-4 z-50 pointer-events-none">
         {totalCartItems > 0 && (
-          <CartSheet language={language}>
-            <Button className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-full h-16 px-8 shadow-2xl shadow-emerald-500/50 flex items-center gap-3 text-lg font-semibold transform hover:scale-105 transition-all">
-              <ShoppingCart className="w-6 h-6" />
-              <span>{language === "uz" ? "Savat" : language === "ru" ? "Корзина" : "Cart"}</span>
-              <Badge className="bg-white text-emerald-600 font-bold text-base h-8 w-8 flex items-center justify-center p-0 rounded-full">
-                {totalCartItems}
-              </Badge>
-            </Button>
-          </CartSheet>
+          <div className="pointer-events-auto">
+            <CartSheet language={language}>
+              <Button className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-full h-12 px-6 shadow-xl flex items-center gap-2 text-base font-bold transition-transform active:scale-95">
+                <ShoppingCart className="w-5 h-5" />
+                <span>{language === "uz" ? "Savat" : language === "ru" ? "Корзина" : "Cart"}</span>
+                <div className="bg-white text-emerald-600 h-6 min-w-[24px] px-1.5 flex items-center justify-center rounded-full text-xs font-black">
+                  {totalCartItems}
+                </div>
+              </Button>
+            </CartSheet>
+          </div>
         )}
       </div>
     </main >

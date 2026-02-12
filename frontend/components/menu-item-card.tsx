@@ -72,61 +72,61 @@ export function MenuItemCard({ item, language, discountBadge, discountPrice, pri
       <div
         data-menu-item-id={item.id}
         onClick={openModal}
-        className="group bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-xl rounded-2xl md:rounded-3xl overflow-hidden border border-white/20 shadow-lg hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300 hover:scale-[1.02] hover:border-emerald-500/30 h-full flex flex-col cursor-pointer"
+        className="group bg-white/10 backdrop-blur-md rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-md hover:border-emerald-500/30 h-full flex flex-col cursor-pointer transition-colors duration-200 menu-content"
       >
-        {/* Image Section - 4:3 on mobile, 1:1 on desktop */}
-        <div className="relative aspect-[4/3] md:aspect-square w-full overflow-hidden">
+        {/* Image Section - Simplified */}
+        <div className="relative aspect-square w-full overflow-hidden">
           <Image
             src={getImageUrl(item.image_thumbnail || item.image)}
             alt={getName()}
             fill
             sizes="(max-width: 768px) 300px, (max-width: 1200px) 400px, 500px"
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-cover"
             priority={priority}
             loading={priority ? undefined : "lazy"}
           />
 
-          {/* Discount Badge */}
+          {/* Discount Badge - Smaller */}
           {effectiveDiscountBadge && (
-            <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-lg text-[10px] md:text-xs font-bold shadow-lg z-10">
+            <div className="absolute top-1.5 left-1.5 bg-red-500 text-white px-1.5 py-0.5 rounded-md text-[10px] font-bold shadow-md z-10">
               {effectiveDiscountBadge}
             </div>
           )}
 
-          <div className="absolute top-2 right-2 md:top-3 md:right-3 bg-black/70 backdrop-blur-md px-2 py-1 md:px-2.5 md:py-1.5 rounded-full flex items-center gap-1">
-            <Star className="w-3 h-3 md:w-4 md:h-4 fill-emerald-400 text-emerald-400" />
-            <span className="text-white font-semibold text-xs md:text-sm">{item.rating}</span>
+          <div className="absolute top-1.5 right-1.5 bg-black/60 backdrop-blur-md px-1.5 py-0.5 rounded-full flex items-center gap-1">
+            <Star className="w-3 h-3 fill-emerald-400 text-emerald-400" />
+            <span className="text-white font-semibold text-[10px]">{item.rating}</span>
           </div>
         </div>
 
-        {/* Content Section */}
-        <div className="flex-1 flex flex-col p-3 md:p-5">
-          {/* Title */}
-          <h3 className="text-sm md:text-lg font-bold text-white mb-2 line-clamp-2 md:line-clamp-1 group-hover:text-emerald-400 transition-colors h-[40px] md:h-auto">
+        {/* Content Section - Tightened Padding (12px) */}
+        <div className="flex-1 flex flex-col p-3">
+          {/* Title - Reduced Margin (6px) */}
+          <h3 className="text-sm md:text-base font-bold text-white mb-1.5 line-clamp-1 group-hover:text-emerald-400 transition-colors">
             {getName()}
           </h3>
 
-          {/* Description hidden on mobile */}
-          <div className="hidden md:block mb-4">
-            <p className="text-xs text-white/60 line-clamp-2">
+          {/* Description - Reduced Margin (4px) */}
+          <div className="mb-2">
+            <p className="text-[10px] md:text-xs text-white/50 line-clamp-2 leading-relaxed">
               {language === "uz" ? (item.description_uz || item.description) : language === "ru" ? (item.description_ru || item.description) : item.description}
             </p>
           </div>
 
           {/* Price and Add Button - Bottom aligned */}
-          <div className="flex items-center justify-between gap-2 md:gap-4 pt-2 md:pt-4 border-t border-white/10 mt-auto">
+          <div className="flex items-center justify-between gap-2 pt-2 border-t border-white/5 mt-auto">
             <div className="flex flex-col">
               {effectiveDiscountPrice ? (
                 <>
-                  <span className="text-base md:text-xl font-bold text-emerald-400">
+                  <span className="text-sm md:text-base font-bold text-emerald-400 whitespace-nowrap">
                     {formatPrice(effectiveDiscountPrice)}
                   </span>
-                  <span className="text-[10px] md:text-xs text-white/40 line-through">
+                  <span className="text-[9px] md:text-[10px] text-white/30 line-through">
                     {formatPrice(item.price)}
                   </span>
                 </>
               ) : (
-                <span className="text-base md:text-xl font-bold text-emerald-400">
+                <span className="text-sm md:text-base font-bold text-emerald-400 whitespace-nowrap">
                   {formatPrice(item.price)}
                 </span>
               )}
@@ -137,47 +137,47 @@ export function MenuItemCard({ item, language, discountBadge, discountPrice, pri
                 onClick={handleAddToCart}
                 disabled={!item.available || isLoading}
                 className={`
-                bg-gradient-to-r hover:to-emerald-700 text-white rounded-full
-                h-8 px-0 w-8 md:w-auto md:h-11 md:px-6 
-                font-semibold shadow-lg transition-all duration-200
-                flex items-center justify-center
+                bg-gradient-to-r text-white rounded-lg
+                h-7 px-2 md:h-9 md:px-4 
+                font-semibold shadow-sm transition-all duration-200
+                flex items-center justify-center text-xs
                 ${isSuccess
-                    ? "from-emerald-500 to-emerald-600 hover:from-emerald-600 shadow-emerald-500/30"
-                    : "from-emerald-600 to-emerald-700 hover:from-emerald-700 shadow-emerald-500/30 hover:shadow-emerald-500/50"
+                    ? "from-emerald-500 to-emerald-600"
+                    : "from-emerald-600 to-emerald-700 hover:from-emerald-500"
                   }
               `}
               >
                 {isLoading ? (
-                  <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" />
+                  <Loader2 className="w-3 h-3 animate-spin" />
                 ) : isSuccess ? (
-                  <Check className="w-4 h-4 md:w-5 md:h-5" />
+                  <Check className="w-3 h-3" />
                 ) : (
                   <>
-                    <Plus className="w-5 h-5 md:hidden" />
-                    <span className="hidden md:inline">
+                    <Plus className="w-3.5 h-3.5 mr-1" />
+                    <span>
                       {language === "uz" ? "Qo'shish" : language === "ru" ? "Добавить" : "Add"}
                     </span>
                   </>
                 )}
               </Button>
             ) : (
-              <div className="flex items-center gap-1 md:gap-2 bg-white/10 rounded-full p-0.5 md:p-1">
+              <div className="flex items-center gap-1 bg-white/5 rounded-lg p-0.5">
                 <Button
                   size="icon"
                   variant="ghost"
                   onClick={handleDecrement}
-                  className="h-7 w-7 md:h-9 md:w-9 rounded-full hover:bg-white/20 text-white transition-all duration-200"
+                  className="h-6 w-6 rounded-md hover:bg-white/10 text-white"
                 >
-                  <Minus className="w-3 h-3 md:w-4 md:h-4" />
+                  <Minus className="w-2.5 h-2.5" />
                 </Button>
-                <span className="text-white font-semibold w-5 md:w-8 text-center text-sm md:text-base">{quantity}</span>
+                <span className="text-white font-semibold w-4 text-center text-xs">{quantity}</span>
                 <Button
                   size="icon"
                   variant="ghost"
                   onClick={handleIncrement}
-                  className="h-7 w-7 md:h-9 md:w-9 rounded-full hover:bg-white/20 text-white transition-all duration-200"
+                  className="h-6 w-6 rounded-md hover:bg-white/10 text-white"
                 >
-                  <Plus className="w-3 h-3 md:w-4 md:h-4" />
+                  <Plus className="w-2.5 h-2.5" />
                 </Button>
               </div>
             )}
