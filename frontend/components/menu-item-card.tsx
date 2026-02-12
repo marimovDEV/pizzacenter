@@ -138,7 +138,7 @@ export function MenuItemCard({ item, language, discountBadge, discountPrice, pri
                 disabled={!item.available || isLoading}
                 className={`
                 bg-gradient-to-r text-white rounded-lg
-                h-7 px-2 md:h-9 md:px-4 
+                h-8 w-8 md:h-9 md:w-auto md:px-4 
                 font-semibold shadow-sm transition-all duration-200
                 flex items-center justify-center text-xs
                 ${isSuccess
@@ -153,8 +153,8 @@ export function MenuItemCard({ item, language, discountBadge, discountPrice, pri
                   <Check className="w-3 h-3" />
                 ) : (
                   <>
-                    <Plus className="w-3.5 h-3.5 mr-1" />
-                    <span>
+                    <Plus className="w-3.5 h-3.5 md:mr-1" />
+                    <span className="hidden md:inline">
                       {language === "uz" ? "Qo'shish" : language === "ru" ? "Добавить" : "Add"}
                     </span>
                   </>
