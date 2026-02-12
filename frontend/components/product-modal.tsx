@@ -18,24 +18,22 @@ interface ProductModalProps {
 export function ProductModal({ item, isOpen, onClose, language }: ProductModalProps) {
     const { cart, addToCart, updateQuantity } = useCart()
 
+    // Scroll Lock Logic
+    useEffect(() => {
+        if (isOpen && item) {
+            document.body.style.overflow = "hidden"
+        } else {
+            document.body.style.overflow = "unset"
+        }
+        return () => {
+            document.body.style.overflow = "unset"
+        }
+    }, [isOpen, item])
+
     if (!isOpen || !item) return null
 
     const cartItem = cart.find((ci) => ci.menuItem.id === item.id)
     const cartQuantity = cartItem?.quantity || 0
-
-    // Scroll Lock Logic
-    useEffect(() => {
-        if (isOpen && item) {
-            // Store original overflow
-            const originalStyle = window.getComputedStyle(document.body).overflow
-            // Prevent scroll
-            document.body.style.overflow = "hidden"
-            // Clean up
-            return () => {
-                document.body.style.overflow = originalStyle
-            }
-        }
-    }, [isOpen, item])
 
     const getName = () => {
         if (language === "uz") return item.name_uz
