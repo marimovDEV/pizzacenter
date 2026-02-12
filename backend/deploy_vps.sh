@@ -9,10 +9,15 @@ echo "🚀 Starting Deployment Setup..."
 echo "🍕 Setting up Pizza Center Garden..."
 cd /var/www/pizzacentergarden
 git pull origin main
-source backend/venv/bin/activate
-pip install -r backend/requirements.txt
-python3 backend/manage.py migrate
-deactivate
+
+# Pizza Center uses 'backend' subdirectory for Django
+PC_BACKEND="/var/www/pizzacentergarden/backend"
+if [ -d "$PC_BACKEND" ]; then
+    source "$PC_BACKEND/venv/bin/activate"
+    pip install -r "$PC_BACKEND/requirements.txt"
+    python3 "$PC_BACKEND/manage.py migrate"
+    deactivate
+fi
 
 # 2. Create Systemd Service for Pizza Center
 echo "📋 Creating pizzacenter.service..."
@@ -36,11 +41,21 @@ EOF
 if [ -d "/root/tokyo" ]; then
     echo "🍣 Setting up Tokyo Kafe..."
     cd /root/tokyo
-    # Manual check: make sure Tokyo origin is correct
-    # git pull origin main 
-    source venv/bin/activate
-    pip install -r backend/requirements.txt
-    python3 backend/manage.py migrate
+    
+    # Check if Tokyo has 'backend' subdirectory or if it's in the root
+    if [ -f "/root/tokyo/backend/manage.py" ]; then
+        TOKYO_ROOT="/root/tokyo/backend"
+    else
+        TOKYO_ROOT="/root/tokyo"
+    fi
+
+    source "/root/tokyo/venv/bin/activate"
+    if [ -f "$TOKYO_ROOT/requirements.txt" ]; then
+        pip install -r "$TOKYO_ROOT/requirements.txt"
+    fi
+    if [ -f "$TOKYO_ROOT/manage.py" ]; then
+        python3 "$TOKYO_ROOT/manage.py" migrate
+    fi
     deactivate
 
     echo "📋 Creating tokyo.service..."
@@ -52,9 +67,9 @@ After=network.target
 [Service]
 User=root
 Group=www-data
-WorkingDirectory=/root/tokyo/backend
-Environment="PATH=/root/tokyo/backend/venv/bin"
-ExecStart=/root/tokyo/backend/venv/bin/gunicorn --workers 3 --bind unix:/root/tokyo/backend/tokyo.sock restaurant_api.wsgi:application
+WorkingDirectory=$TOKYO_ROOT
+Environment="PATH=/root/tokyo/venv/bin"
+ExecStart=/root/tokyo/venv/bin/gunicorn --workers 3 --bind unix:$TOKYO_ROOT/tokyo.sock restaurant_api.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
