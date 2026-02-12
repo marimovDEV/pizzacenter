@@ -113,7 +113,7 @@ export function PromotionsCarousel({ language }: PromotionsCarouselProps) {
   return (
     <div className="mb-8">
       <div className="relative">
-        <div className="bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/20 shadow-xl">
+        <div className="bg-white/10 rounded-3xl overflow-hidden border border-white/20 shadow-xl">
           <div className="relative h-48 md:h-64">
             <Image
               src={currentPromotion.image || "/placeholder.svg"}
@@ -157,7 +157,7 @@ export function PromotionsCarousel({ language }: PromotionsCarouselProps) {
                 <Button
                   onClick={openModal}
                   size="sm"
-                  className="bg-white/20 backdrop-blur-xl border border-white/30 text-white hover:bg-white/30 rounded-full text-sm font-semibold flex-1"
+                  className="bg-white/20 border border-white/30 text-white hover:bg-white/30 rounded-full text-sm font-semibold flex-1"
                 >
                   {language === "uz" ? "Ko'rish" : language === "ru" ? "Смотреть" : "View"}
                 </Button>
@@ -181,14 +181,14 @@ export function PromotionsCarousel({ language }: PromotionsCarouselProps) {
             <Button
               onClick={prevPromotion}
               size="icon"
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 backdrop-blur-xl hover:bg-white/30 border border-white/30"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 border border-white/30"
             >
               <ChevronLeft className="w-5 h-5 text-white" />
             </Button>
             <Button
               onClick={nextPromotion}
               size="icon"
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 backdrop-blur-xl hover:bg-white/30 border border-white/30"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 border border-white/30"
             >
               <ChevronRight className="w-5 h-5 text-white" />
             </Button>

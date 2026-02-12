@@ -582,3 +582,226 @@ export function usePromotions() {
 
   return { promotions, loading, error, refetch };
 }
+
+// Admin Orders hook
+export function useAdminOrders() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const fetchOrders = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const timestamp = new Date().getTime();
+      const response = await fetch(`${API_URL}/orders/?t=${timestamp}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        cache: 'no-cache',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const items = Array.isArray(data) ? data : (data.results || []);
+      setOrders(items as Order[]);
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
+
+  const refetch = useCallback(() => {
+    fetchOrders();
+  }, [fetchOrders]);
+
+  return { orders, loading, error, refetch };
+}
+
+// Admin Reviews hook (shows all, including unapproved)
+export function useAdminReviews() {
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const fetchReviews = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const timestamp = new Date().getTime();
+      const response = await fetch(`${API_URL}/admin/reviews/?t=${timestamp}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        cache: 'no-cache',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const items = Array.isArray(data) ? data : (data.results || []);
+      setReviews(items as Review[]);
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchReviews();
+  }, [fetchReviews]);
+
+  const refetch = useCallback(() => {
+    fetchReviews();
+  }, [fetchReviews]);
+
+  return { reviews, loading, error, refetch };
+}
+
+// Admin Feedback hook
+export function useAdminFeedback() {
+  const [feedback, setFeedback] = useState<Feedback[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const fetchFeedback = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const timestamp = new Date().getTime();
+      const response = await fetch(`${API_URL}/feedback/?t=${timestamp}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        cache: 'no-cache',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const items = Array.isArray(data) ? data : (data.results || []);
+      setFeedback(items as Feedback[]);
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchFeedback();
+  }, [fetchFeedback]);
+
+  const refetch = useCallback(() => {
+    fetchFeedback();
+  }, [fetchFeedback]);
+
+  return { feedback, loading, error, refetch };
+}
+
+// Admin Site Settings hook (for editing)
+export function useAdminSiteSettings() {
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const fetchSettings = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const timestamp = new Date().getTime();
+      const response = await fetch(`${API_URL}/site-settings/?t=${timestamp}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        cache: 'no-cache',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setSettings(data || null);
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSettings();
+  }, [fetchSettings]);
+
+  const refetch = useCallback(() => {
+    fetchSettings();
+  }, [fetchSettings]);
+
+  return { settings, loading, error, refetch };
+}
+
+// Admin Restaurant Info hook (for editing)
+export function useAdminRestaurantInfo() {
+  const [info, setInfo] = useState<RestaurantInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const fetchInfo = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const timestamp = new Date().getTime();
+      const response = await fetch(`${API_URL}/restaurant-info/?t=${timestamp}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        cache: 'no-cache',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setInfo(data || null);
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchInfo();
+  }, [fetchInfo]);
+
+  const refetch = useCallback(() => {
+    fetchInfo();
+  }, [fetchInfo]);
+
+  return { info, loading, error, refetch };
+}

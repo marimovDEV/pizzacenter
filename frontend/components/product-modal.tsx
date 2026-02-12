@@ -56,7 +56,7 @@ export function ProductModal({ item, isOpen, onClose, language }: ProductModalPr
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-lg animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-in fade-in duration-200">
             <div
                 className="absolute inset-0"
                 onClick={onClose}
@@ -65,7 +65,7 @@ export function ProductModal({ item, isOpen, onClose, language }: ProductModalPr
                 {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md flex items-center justify-center transition-all text-white border border-white/10"
+                    className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/60 flex items-center justify-center transition-all text-white border border-white/10"
                 >
                     <X className="w-5 h-5" />
                 </button>
@@ -85,7 +85,7 @@ export function ProductModal({ item, isOpen, onClose, language }: ProductModalPr
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
 
                     {/* Rating Badge */}
-                    <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-white/10">
+                    <div className="absolute top-4 left-4 bg-black/70 px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-white/10">
                         <Star className="w-4 h-4 fill-emerald-400 text-emerald-400" />
                         <span className="text-white font-bold">{item.rating}</span>
                     </div>

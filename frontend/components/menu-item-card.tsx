@@ -72,7 +72,7 @@ export function MenuItemCard({ item, language, discountBadge, discountPrice, pri
       <div
         data-menu-item-id={item.id}
         onClick={openModal}
-        className="group bg-white/10 backdrop-blur-md rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-md hover:border-emerald-500/30 h-full flex flex-col cursor-pointer transition-colors duration-200 menu-content"
+        className="group bg-white/10 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-md hover:border-emerald-500/30 h-full flex flex-col cursor-pointer transition-colors duration-200 menu-content"
       >
         {/* Image Section - Simplified */}
         <div className="relative aspect-square w-full overflow-hidden">
@@ -93,7 +93,7 @@ export function MenuItemCard({ item, language, discountBadge, discountPrice, pri
             </div>
           )}
 
-          <div className="absolute top-1.5 right-1.5 bg-black/60 backdrop-blur-md px-1.5 py-0.5 rounded-full flex items-center gap-1">
+          <div className="absolute top-1.5 right-1.5 bg-black/70 px-1.5 py-0.5 rounded-full flex items-center gap-1">
             <Star className="w-3 h-3 fill-emerald-400 text-emerald-400" />
             <span className="text-white font-semibold text-[10px]">{item.rating}</span>
           </div>

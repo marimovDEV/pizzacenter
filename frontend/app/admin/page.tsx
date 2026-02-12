@@ -1,10 +1,13 @@
 "use client"
-import { ArrowLeft, Package, Tag, Megaphone, MessageSquare, LogOut } from "lucide-react"
+import { ArrowLeft, Package, Tag, Megaphone, ShoppingBag, Star, Settings, LogOut } from "lucide-react"
 import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CategoriesTab } from "@/components/admin/categories-tab"
 import { MenuItemsTab } from "@/components/admin/menu-items-tab"
 import { PromotionsTab } from "@/components/admin/promotions-tab"
+import { OrdersTab } from "@/components/admin/orders-tab"
+import { ReviewsTab } from "@/components/admin/reviews-tab"
+import { SettingsTab } from "@/components/admin/settings-tab"
 import { ErrorBoundary } from "@/components/admin/error-boundary"
 import { AuthGuard } from "@/components/admin/auth-guard"
 import { toast } from "sonner"
@@ -93,6 +96,39 @@ function AdminPanelContent() {
                 <Megaphone className="w-4 h-4" />
                 <span className="text-sm font-medium">Aksiyalar</span>
               </button>
+
+              <button
+                onClick={() => setActiveTab("orders")}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all ${activeTab === "orders"
+                  ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/20"
+                  : "bg-white/10 text-white/70 hover:bg-white/20"
+                  }`}
+              >
+                <ShoppingBag className="w-4 h-4" />
+                <span className="text-sm font-medium">Buyurtmalar</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("reviews")}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all ${activeTab === "reviews"
+                  ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/20"
+                  : "bg-white/10 text-white/70 hover:bg-white/20"
+                  }`}
+              >
+                <Star className="w-4 h-4" />
+                <span className="text-sm font-medium">Sharhlar</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("settings")}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all ${activeTab === "settings"
+                  ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/20"
+                  : "bg-white/10 text-white/70 hover:bg-white/20"
+                  }`}
+              >
+                <Settings className="w-4 h-4" />
+                <span className="text-sm font-medium">Sozlamalar</span>
+              </button>
             </div>
           </div>
 
@@ -115,6 +151,24 @@ function AdminPanelContent() {
               <TabsContent value="promotions">
                 <ErrorBoundary>
                   <PromotionsTab />
+                </ErrorBoundary>
+              </TabsContent>
+
+              <TabsContent value="orders">
+                <ErrorBoundary>
+                  <OrdersTab />
+                </ErrorBoundary>
+              </TabsContent>
+
+              <TabsContent value="reviews">
+                <ErrorBoundary>
+                  <ReviewsTab />
+                </ErrorBoundary>
+              </TabsContent>
+
+              <TabsContent value="settings">
+                <ErrorBoundary>
+                  <SettingsTab />
                 </ErrorBoundary>
               </TabsContent>
             </Tabs>

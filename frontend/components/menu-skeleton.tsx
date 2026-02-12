@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export function MenuSkeleton() {
     return (
-        <div className="bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 h-full flex flex-col">
+        <div className="bg-white/5 rounded-3xl overflow-hidden border border-white/10 h-full flex flex-col">
             {/* Image Skeleton */}
             <div className="relative aspect-square w-full">
                 <Skeleton className="h-full w-full bg-white/10" />

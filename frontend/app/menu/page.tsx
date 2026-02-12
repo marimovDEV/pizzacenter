@@ -19,17 +19,20 @@ import { List } from "react-window"
 
 // --- Constants & Helper Components ---
 
-function useWindowSize() {
-  const [size, setSize] = useState([0, 0])
+function useColumnCount() {
+  const [columns, setColumns] = useState(2)
+
   useEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight])
+    function updateColumns() {
+      const width = window.innerWidth
+      setColumns(width < 768 ? 2 : width < 1024 ? 3 : 4)
     }
-    window.addEventListener("resize", updateSize)
-    updateSize()
-    return () => window.removeEventListener("resize", updateSize)
+    window.addEventListener("resize", updateColumns)
+    updateColumns()
+    return () => window.removeEventListener("resize", updateColumns)
   }, [])
-  return size
+
+  return columns
 }
 
 
@@ -71,22 +74,17 @@ interface MenuVirtualGridProps {
 }
 
 function MenuVirtualGrid({ items, language }: MenuVirtualGridProps) {
-  const [width] = useWindowSize()
-  const listRef = useRef<any>(null)
-
-  // Safety check: if List is not yet defined, don't render it
-  if (!List) return null
-
-  // Responsive column count
-  const columnCount = width < 768 ? 2 : width < 1024 ? 3 : 4
+  const columnCount = useColumnCount()
   const rowCount = Math.ceil(items.length / columnCount)
 
   // Item dimensions - Optimized for Tokyo density
-  const rowHeightValue = width < 768 ? 280 : 380
-  const gridGap = width < 768 ? 8 : 16
+  const rowHeightValue = (typeof window !== "undefined" && window.innerWidth < 768) ? 280 : 380
+  const gridGap = (typeof window !== "undefined" && window.innerWidth < 768) ? 8 : 16
 
   // Calculate total height to avoid scrollbar issues
-  const totalHeight = typeof window !== "undefined" ? window.innerHeight - 200 : 800
+  const totalHeight = typeof window !== "undefined" ? window.innerHeight - 180 : 800
+
+  if (!List || items.length === 0) return null
 
   return (
     <List
@@ -262,7 +260,7 @@ export default function MenuPage() {
 
   return (
     <main className="min-h-screen bg-slate-900 pb-[70px]">
-      <div className="fixed inset-0 bg-[url('/hero_background.jpg')] bg-cover bg-center bg-fixed opacity-10 pointer-events-none" />
+      <div className="fixed inset-0 bg-[url('/hero_background.jpg')] bg-cover bg-center bg-no-repeat md:bg-fixed opacity-10 pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-3 md:px-4 py-4 md:py-6">
         {/* Header - Simplified */}
