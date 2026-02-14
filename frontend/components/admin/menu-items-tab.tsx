@@ -553,19 +553,26 @@ export function MenuItemsTab() {
                           <Label className="text-white">Kategoriya <span className="text-red-400">*</span></Label>
                           <Popover open={openCombobox} onOpenChange={setOpenCombobox}>
                             <PopoverTrigger asChild>
-                              <Button variant="outline" className="w-full justify-between bg-white/5 border-white/20 text-white">
+                              <Button variant="outline" className="w-full justify-between bg-white/5 border-white/20 text-white h-11">
                                 {formData.category ? adminCategories.find(c => c.id === parseInt(formData.category))?.name_uz || "Tanlandi" : "Tanlang..."}
                                 <Search className="ml-2 h-4 w-4 opacity-50" />
                               </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-[300px] p-0 bg-slate-900 border-white/20">
+                            <PopoverContent className="w-[300px] p-0 bg-slate-900 border-white/20 shadow-2xl pointer-events-auto" align="start">
                               <Command className="bg-slate-900 text-white">
-                                <CommandInput placeholder="Qidirish..." />
-                                <CommandList className="max-h-[300px] overflow-y-auto custom-scrollbar">
+                                <CommandInput placeholder="Qidirish..." className="h-11" />
+                                <CommandList className="max-h-[300px] overflow-y-auto overscroll-contain pointer-events-auto">
                                   <CommandEmpty>Topilmadi</CommandEmpty>
                                   <CommandGroup>
                                     {adminCategories.map(cat => (
-                                      <CommandItem key={cat.id} onSelect={() => { setFormData({ ...formData, category: cat.id.toString() }); setOpenCombobox(false) }} className="text-white hover:bg-white/10">
+                                      <CommandItem
+                                        key={cat.id}
+                                        onSelect={() => {
+                                          setFormData({ ...formData, category: cat.id.toString() });
+                                          setOpenCombobox(false)
+                                        }}
+                                        className="text-white hover:bg-white/10 cursor-pointer py-2.5"
+                                      >
                                         <Check className={cn("mr-2 h-4 w-4", formData.category === cat.id.toString() ? "opacity-100" : "opacity-0")} />
                                         {cat.name_uz || cat.name}
                                       </CommandItem>
