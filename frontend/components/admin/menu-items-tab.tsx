@@ -641,15 +641,51 @@ export function MenuItemsTab() {
 
                   {currentStep === 4 && (
                     <div className="space-y-6">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-white/5 p-4 rounded-xl border border-white/10 space-y-4">
-                          <div className="flex items-center justify-between">
-                            <Label className="text-white">Faol</Label>
-                            <Switch checked={formData.is_active} onCheckedChange={(c) => setFormData({ ...formData, is_active: c })} />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                          <div className="bg-white/5 p-4 rounded-xl border border-white/10 space-y-4">
+                            <div className="flex items-center justify-between">
+                              <Label className="text-white">Faol</Label>
+                              <Switch checked={formData.is_active} onCheckedChange={(c) => setFormData({ ...formData, is_active: c })} />
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <Label className="text-white">Mavjud</Label>
+                              <Switch checked={formData.available} onCheckedChange={(c) => setFormData({ ...formData, available: c })} />
+                            </div>
                           </div>
-                          <div className="flex items-center justify-between">
-                            <Label className="text-white">Mavjud</Label>
-                            <Switch checked={formData.available} onCheckedChange={(c) => setFormData({ ...formData, available: c })} />
+                        </div>
+
+                        <div className="space-y-4">
+                          <div className="bg-white/5 p-5 rounded-xl border border-white/10 space-y-5">
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <Label className="text-white">Global tartib raqami</Label>
+                                <span className="text-[10px] text-white/30 font-mono">global_order</span>
+                              </div>
+                              <Input
+                                type="number"
+                                value={formData.global_order || ""}
+                                placeholder="Masalan: 10"
+                                onChange={(e) => setFormData({ ...formData, global_order: e.target.value === "" ? 0 : parseInt(e.target.value) })}
+                                className="bg-white/5 border-white/20 text-white h-11"
+                              />
+                              <p className="text-[10px] text-white/40 italic">Agar bo'sh qolsa, oxiriga qo'shiladi</p>
+                            </div>
+
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <Label className="text-white">Kategoriya ichida tartibi</Label>
+                                <span className="text-[10px] text-white/30 font-mono">category_order</span>
+                              </div>
+                              <Input
+                                type="number"
+                                value={formData.category_order || ""}
+                                placeholder="Masalan: 5"
+                                onChange={(e) => setFormData({ ...formData, category_order: e.target.value === "" ? 0 : parseInt(e.target.value) })}
+                                className="bg-white/5 border-white/20 text-white h-11"
+                              />
+                              <p className="text-[10px] text-white/40 italic">Bu kategoriya ichidagi o'rnini belgilaydi</p>
+                            </div>
                           </div>
                         </div>
                       </div>
