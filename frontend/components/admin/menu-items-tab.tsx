@@ -435,7 +435,6 @@ export function MenuItemsTab() {
     if (step === 1) {
       if (!formData.name_uz) { toast.error("O'zbekcha nomini kiritish shart"); return false }
       if (!formData.category) { toast.error("Kategoriya tanlanishi shart"); return false }
-      if (!formData.imagePreview) { toast.error("Rasm yuklanishi shart"); return false }
     }
     if (step === 2) {
       if (formData.price < 0) { toast.error("Narx manfiy bo'lishi mumkin emas"); return false }
@@ -526,7 +525,7 @@ export function MenuItemsTab() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in slide-in-from-right-4">
                       {/* Left: Image Upload */}
                       <div className="space-y-4">
-                        <Label className="text-white font-medium">Taom Rasmi <span className="text-red-400">*</span></Label>
+                        <Label className="text-white font-medium">Taom Rasmi</Label>
                         <div className="border-2 border-dashed border-white/10 rounded-xl p-4 flex flex-col items-center justify-center min-h-[250px] bg-white/5 hover:bg-white/10 transition-colors relative group text-center">
                           {formData.imagePreview ? (
                             <>
@@ -626,23 +625,75 @@ export function MenuItemsTab() {
 
                   {currentStep === 3 && (
                     <div className="space-y-6">
-                      <div className="flex justify-center mb-4">
-                        <div className="flex bg-slate-800 rounded p-1">
-                          {(['uz', 'ru', 'en'] as const).map(lang => (
-                            <button key={lang} type="button" onClick={() => setActiveLang(lang)} className={cn("px-6 py-1.5 text-sm rounded uppercase font-medium", activeLang === lang ? "bg-emerald-500 text-white" : "text-white/50")}>{lang}</button>
+                      <div className="space-y-4">
+                        <Label className="text-white font-medium">Tavsif (Tarkibi emas) <span className="text-[10px] text-white/30 ml-2">Ixtiyoriy</span></Label>
+                        <div className="flex justify-center mb-2">
+                          <div className="flex bg-slate-800 rounded p-1">
+                            {(['uz', 'ru', 'en'] as const).map(lang => (
+                              <button key={lang} type="button" onClick={() => setActiveLang(lang)} className={cn("px-6 py-1.5 text-sm rounded uppercase font-medium", activeLang === lang ? "bg-emerald-500 text-white" : "text-white/50")}>{lang}</button>
+                            ))}
+                          </div>
+                        </div>
+                        <Textarea
+                          value={activeLang === 'uz' ? formData.description_uz : activeLang === 'ru' ? formData.description_ru : formData.description}
+                          onChange={(e) => {
+                            if (activeLang === 'uz') setFormData({ ...formData, description_uz: e.target.value })
+                            else if (activeLang === 'ru') setFormData({ ...formData, description_ru: e.target.value })
+                            else setFormData({ ...formData, description: e.target.value })
+                          }}
+                          className="bg-white/5 border-white/20 text-white min-h-[100px]"
+                          placeholder="Taom haqida qisqacha ma'lumot..."
+                        />
+                      </div>
+
+                      {/* Ingredients Section */}
+                      <div className="space-y-4 pt-4 border-t border-white/5">
+                        <Label className="text-white font-medium flex items-center gap-2">
+                          Taom Tarkibi (Masalan: go'sht, piyoz)
+                          <span className="text-[10px] text-white/30 italic">Step 3/4</span>
+                        </Label>
+                        <div className="relative">
+                          <Input
+                            placeholder="Add ingredient and press Enter..."
+                            value={tagInput}
+                            onChange={(e) => setTagInput(e.target.value)}
+                            onKeyDown={handleAddTag}
+                            className="bg-white/5 border-white/10 text-white pl-4 pr-12 h-11 focus:ring-emerald-500/50"
+                          />
+                          <Button
+                            size="sm"
+                            type="button"
+                            onClick={() => {
+                              const val = tagInput.trim()
+                              if (val) {
+                                const langKey = activeLang === 'uz' ? 'ingredients_uz' : activeLang === 'ru' ? 'ingredients_ru' : 'ingredients'
+                                const ingredients = formData[langKey as keyof typeof formData] as string[]
+                                if (!ingredients.includes(val)) {
+                                  setFormData(prev => ({ ...prev, [langKey]: [...(prev[langKey as keyof typeof formData] as string[]), val] }))
+                                }
+                                setTagInput("")
+                              }
+                            }}
+                            className="absolute right-1 top-1 h-9 bg-white/10 hover:bg-emerald-500 transition-colors"
+                          >
+                            Add
+                          </Button>
+                        </div>
+
+                        <div className="flex flex-wrap gap-2 mt-4 min-h-[40px] p-3 rounded-xl bg-white/5 border border-white/5">
+                          {(activeLang === 'uz' ? formData.ingredients_uz : activeLang === 'ru' ? formData.ingredients_ru : formData.ingredients).length === 0 && (
+                            <span className="text-white/20 text-xs italic">Hech narsa qo'shilmagan</span>
+                          )}
+                          {(activeLang === 'uz' ? formData.ingredients_uz : activeLang === 'ru' ? formData.ingredients_ru : formData.ingredients).map((tag, i) => (
+                            <span key={i} className="group flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/20 text-emerald-400 rounded-full text-xs font-medium border border-emerald-500/20 hover:bg-emerald-500/30 transition-all">
+                              {tag}
+                              <button onClick={() => removeTag(tag, activeLang)} className="hover:text-red-400 transition-colors">
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
                           ))}
                         </div>
                       </div>
-                      <Textarea
-                        value={activeLang === 'uz' ? formData.description_uz : activeLang === 'ru' ? formData.description_ru : formData.description}
-                        onChange={(e) => {
-                          if (activeLang === 'uz') setFormData({ ...formData, description_uz: e.target.value })
-                          else if (activeLang === 'ru') setFormData({ ...formData, description_ru: e.target.value })
-                          else setFormData({ ...formData, description: e.target.value })
-                        }}
-                        className="bg-white/5 border-white/20 text-white min-h-[150px]"
-                        placeholder="Tavsif..."
-                      />
                     </div>
                   )}
 
