@@ -561,7 +561,7 @@ export function MenuItemsTab() {
                             <PopoverContent className="w-[300px] p-0 bg-slate-900 border-white/20">
                               <Command className="bg-slate-900 text-white">
                                 <CommandInput placeholder="Qidirish..." />
-                                <CommandList>
+                                <CommandList className="max-h-[300px] overflow-y-auto custom-scrollbar">
                                   <CommandEmpty>Topilmadi</CommandEmpty>
                                   <CommandGroup>
                                     {adminCategories.map(cat => (
