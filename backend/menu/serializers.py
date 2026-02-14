@@ -51,6 +51,11 @@ class MenuItemSerializer(serializers.ModelSerializer):
             'available', 'is_active', 'prep_time', 'rating', 'ingredients', 'ingredients_uz', 'ingredients_ru',
             'created_at', 'updated_at'
         ]
+        extra_kwargs = {
+            'description': {'required': False, 'allow_blank': True},
+            'description_uz': {'required': False, 'allow_blank': True},
+            'description_ru': {'required': False, 'allow_blank': True},
+        }
 
 
 class LinkedDishSerializer(serializers.ModelSerializer):
