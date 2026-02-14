@@ -47,9 +47,9 @@ class MenuItem(models.Model):
     name = models.CharField(max_length=200)
     name_uz = models.CharField(max_length=200)
     name_ru = models.CharField(max_length=200)
-    description = models.TextField()
-    description_uz = models.TextField()
-    description_ru = models.TextField()
+    description = models.TextField(blank=True, null=True)
+    description_uz = models.TextField(blank=True, null=True)
+    description_ru = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     weight = models.DecimalField(max_digits=8, decimal_places=2, validators=[MinValueValidator(0)], blank=True, null=True, help_text="Weight in grams")
     image = ProcessedImageField(
