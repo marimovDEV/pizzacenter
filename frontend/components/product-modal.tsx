@@ -87,12 +87,13 @@ export function ProductModal({ item, isOpen, onClose, language }: ProductModalPr
                     {/* Image Section */}
                     <div className="relative h-64 md:h-80 w-full">
                         <Image
-                            src={item.image || "/placeholder.svg"}
+                            src={getImageUrl(item.image)}
                             alt={getName()}
                             fill
                             sizes="(max-width: 768px) 100vw, 400px"
                             className="object-cover"
                             priority={true}
+                            unoptimized={true}
                         />
 
                         {/* Overlay */}

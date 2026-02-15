@@ -83,6 +83,7 @@ export function MenuItemCard({ item, language, discountBadge, discountPrice, pri
             sizes="(max-width: 768px) 300px, (max-width: 1200px) 400px, 500px"
             className="object-cover"
             priority={priority}
+            unoptimized={true}
             loading={priority ? undefined : "lazy"}
           />
 
