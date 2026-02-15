@@ -15,7 +15,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { formatPrice } from "@/lib/api"
+import { formatPrice, getImageUrl } from "@/lib/api"
 import { useMenu } from "@/lib/menu-context"
 import { useApiClient } from "@/hooks/use-api"
 import { usePromotions, useAdminCategories, useMenuItems } from "@/hooks/use-api"
@@ -416,11 +416,12 @@ export function PromotionsTab() {
                         <div className="relative w-24 h-24 rounded-lg overflow-hidden bg-slate-800 border border-white/20 flex-shrink-0">
                           {formData.image ? (
                             <Image
-                              src={formData.image || "/placeholder.svg"}
+                              src={getImageUrl(formData.image)}
                               alt={formData.title || "Aksiya rasmi preview"}
                               fill
                               className="object-cover"
                               sizes="96px"
+                              unoptimized={true}
                             />
                           ) : (
                             <div className="flex items-center justify-center h-full text-white/20">
@@ -784,11 +785,12 @@ export function PromotionsTab() {
             >
               <div className="relative h-40">
                 <Image
-                  src={promotion.image || "/placeholder.svg"}
+                  src={getImageUrl(promotion.image)}
                   alt={promotion.title_uz || "Aksiya rasmi"}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  unoptimized={true}
                 />
                 {promotion.is_active && (
                   <div className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">

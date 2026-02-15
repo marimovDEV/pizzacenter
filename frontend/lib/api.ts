@@ -505,12 +505,15 @@ export const formatWeight = (weight: number): string => {
 
 export const getImageUrl = (imagePath: string | null | undefined): string => {
   if (!imagePath) return '/placeholder.svg';
-  if (imagePath.startsWith('http')) return imagePath;
+  if (imagePath.startsWith('http') || imagePath.startsWith('data:') || imagePath.startsWith('blob:')) return imagePath;
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
   const backendUrl = baseUrl.endsWith('/api') ? baseUrl.slice(0, -4) : baseUrl;
+
+  // Ensure we don't end up with double slashes if backendUrl ends with / or path starts with /
+  const cleanBackendUrl = backendUrl.endsWith('/') ? backendUrl.slice(0, -1) : backendUrl;
   const path = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
 
-  if (path === '/logo.png') return `${backendUrl}/static/logo.png`;
-  return `${backendUrl}${path}`;
+  if (path === '/logo.png') return `${cleanBackendUrl}/static/logo.png`;
+  return `${cleanBackendUrl}${path}`;
 };

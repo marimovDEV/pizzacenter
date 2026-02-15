@@ -24,7 +24,7 @@ import {
   PaginationPrevious,
   PaginationEllipsis,
 } from "@/components/ui/pagination"
-import { formatPrice, formatWeight } from "@/lib/api"
+import { formatPrice, formatWeight, getImageUrl } from "@/lib/api"
 import { useMenu } from "@/lib/menu-context"
 import { useApiClient } from "@/hooks/use-api"
 import { useAdminMenuItems, useAdminCategories } from "@/hooks/use-api"
@@ -70,7 +70,7 @@ const MenuItemCard = memo(({
       )}
     >
       <div className="relative h-40 sm:h-48">
-        <Image src={item.image || "/placeholder.svg"} alt={item.name_uz || item.name} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-110" unoptimized />
+        <Image src={getImageUrl(item.image)} alt={item.name_uz || item.name} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-110" unoptimized={true} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60" />
 
         {/* Badges */}
@@ -529,7 +529,7 @@ export function MenuItemsTab() {
                         <div className="border-2 border-dashed border-white/10 rounded-xl p-4 flex flex-col items-center justify-center min-h-[250px] bg-white/5 hover:bg-white/10 transition-colors relative group text-center">
                           {formData.imagePreview ? (
                             <>
-                              <Image src={formData.imagePreview} alt="Preview" fill className="object-cover rounded-lg opacity-80 group-hover:opacity-40 transition-opacity" />
+                              <Image src={getImageUrl(formData.imagePreview)} alt="Preview" fill className="object-cover rounded-lg opacity-80 group-hover:opacity-40 transition-opacity" unoptimized={true} />
                               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span className="bg-black/50 text-white px-3 py-1 rounded-full text-sm backdrop-blur">O'zgartirish</span>
                               </div>
