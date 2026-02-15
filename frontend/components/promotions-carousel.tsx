@@ -8,7 +8,7 @@ import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { PromotionModal } from "@/components/promotion-modal"
 import type { Language, Promotion } from "@/lib/types"
-import { formatPrice } from "@/lib/api"
+import { formatPrice, getImageUrl } from "@/lib/api"
 
 interface PromotionsCarouselProps {
   language: Language
@@ -116,7 +116,7 @@ export function PromotionsCarousel({ language }: PromotionsCarouselProps) {
         <div className="bg-white/10 rounded-3xl overflow-hidden border border-white/20 shadow-xl">
           <div className="relative h-48 md:h-64">
             <Image
-              src={currentPromotion.image || "/placeholder.svg"}
+              src={getImageUrl(currentPromotion.image)}
               alt={getTitle()}
               fill
               className="object-cover"
@@ -128,6 +128,7 @@ export function PromotionsCarousel({ language }: PromotionsCarouselProps) {
                 // Image loaded successfully
               }}
               priority={currentIndex === 0}
+              unoptimized={true}
               quality={75}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               placeholder="blur"

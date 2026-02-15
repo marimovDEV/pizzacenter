@@ -11,7 +11,7 @@ import {
     SheetFooter,
 } from "@/components/ui/sheet"
 import { useCart } from "@/lib/cart-context"
-import { formatPrice } from "@/lib/api"
+import { formatPrice, getImageUrl } from "@/lib/api"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
@@ -72,11 +72,12 @@ export function CartSheet({ children, language }: CartSheetProps) {
                             <div key={item.menuItem.id} className="flex gap-3 bg-white/5 p-2 rounded-xl border border-white/10">
                                 <div className="relative w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-white/5">
                                     <Image
-                                        src={item.menuItem.image || "/placeholder.svg"}
+                                        src={getImageUrl(item.menuItem.image_thumbnail || item.menuItem.image)}
                                         alt={getName(item.menuItem) || "Mahsulot rasmi"}
                                         fill
                                         className="object-cover"
                                         sizes="56px"
+                                        unoptimized={true}
                                     />
                                 </div>
                                 <div className="flex-1 flex flex-col justify-between min-w-0">

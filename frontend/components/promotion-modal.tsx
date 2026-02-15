@@ -95,7 +95,7 @@ export function PromotionModal({ promotion, isOpen, onClose, language }: Promoti
         {/* Image Section */}
         <div className="relative h-64 md:h-80">
           <Image
-            src={promotion.image || promotion.display_image || "/hero_background.jpg"}
+            src={getImageUrl(promotion.image || promotion.display_image)}
             alt={getTitle()}
             fill
             className="object-cover"
@@ -106,6 +106,7 @@ export function PromotionModal({ promotion, isOpen, onClose, language }: Promoti
             onLoad={() => {
               // Image loaded successfully
             }}
+            unoptimized={true}
             quality={75}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             placeholder="blur"

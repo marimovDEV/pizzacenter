@@ -7,7 +7,7 @@ import Image from "next/image"
 import { ChevronLeft, ChevronRight, Tag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { Language } from "@/lib/types"
-import { formatPrice } from "@/lib/api"
+import { formatPrice, getImageUrl } from "@/lib/api"
 
 export function PromotionsSection() {
   const { promotions, loading } = useMenu()
@@ -89,7 +89,7 @@ export function PromotionsSection() {
               {/* Image */}
               <div className="relative h-64 md:h-96">
                 <Image
-                  src={currentPromotion.image || "/placeholder.svg"}
+                  src={getImageUrl(currentPromotion.image)}
                   alt={getTitle()}
                   fill
                   className="object-cover"
@@ -101,6 +101,7 @@ export function PromotionsSection() {
                     // Image loaded successfully
                   }}
                   priority={currentIndex === 0}
+                  unoptimized={true}
                   quality={75}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   placeholder="blur"
