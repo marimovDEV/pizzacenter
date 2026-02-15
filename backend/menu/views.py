@@ -36,8 +36,8 @@ class CategoryListView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['name', 'name_uz', 'name_ru']
-    ordering_fields = ['name', 'created_at']
-    ordering = ['name']
+    ordering_fields = ['name', 'created_at', 'order']
+    ordering = ['order', 'name']
     permission_classes = [AllowAny]
     parser_classes = (MultiPartParser, FormParser, JSONParser)
     

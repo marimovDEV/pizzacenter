@@ -112,7 +112,7 @@ export function MenuProvider({ children }: { children: React.ReactNode }) {
   // API dan kelgan ma'lumotlarni saqlash
   useEffect(() => {
     if (apiCategories && Array.isArray(apiCategories)) {
-      setCategories(apiCategories)
+      setCategories([...apiCategories].sort((a, b) => (a.order || 0) - (b.order || 0)))
     } else if (!categoriesLoading && apiCategories === null) {
       setCategories([])
     }
