@@ -6,7 +6,7 @@ import { X, Plus, Minus, ShoppingCart, Star, Clock, Weight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/lib/cart-context"
 import type { MenuItem } from "@/lib/types"
-import { formatPrice, formatWeight } from "@/lib/api"
+import { formatPrice, formatWeight, getImageUrl } from "@/lib/api"
 
 interface ProductModalProps {
     item: MenuItem | null
