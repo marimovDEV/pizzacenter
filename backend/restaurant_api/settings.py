@@ -236,7 +236,12 @@ CORS_ALLOW_HEADERS = [
 # Session settings
 SESSION_COOKIE_HTTPONLY = False  # Allow JavaScript access for debugging
 SESSION_COOKIE_SAMESITE = 'Lax'  # Allow cross-site requests
-SESSION_COOKIE_SECURE = False  # Allow HTTP in development
+SESSION_COOKIE_SECURE = True   # Productionda True bo'lishi kerak
+
+# HTTPS settings
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+SECURE_SSL_REDIRECT = False  # Nginx orqali boshqariladi
 
 # Cache settings for better performance
 CACHES = {
