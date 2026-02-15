@@ -8,6 +8,13 @@ from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import ResizeToFill, ResizeToFit
+from .utils import (
+    menu_item_upload_path, 
+    category_upload_path, 
+    promotion_upload_path, 
+    site_settings_upload_path, 
+    restaurant_info_upload_path
+)
 
 
 class Category(models.Model):
@@ -16,7 +23,7 @@ class Category(models.Model):
     name_ru = models.CharField(max_length=100)
     icon = models.CharField(max_length=10, default="🍽️")
     image = ProcessedImageField(
-        upload_to='categories/',
+        upload_to=category_upload_path,
         processors=[ResizeToFill(800, 800)],
         format='WEBP',
         options={'quality': 80},
@@ -53,7 +60,7 @@ class MenuItem(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     weight = models.DecimalField(max_digits=8, decimal_places=2, validators=[MinValueValidator(0)], blank=True, null=True, help_text="Weight in grams")
     image = ProcessedImageField(
-        upload_to='menu_items/',
+        upload_to=menu_item_upload_path,
         processors=[ResizeToFit(1200, 1200)],
         format='WEBP',
         options={'quality': 80},
@@ -169,7 +176,7 @@ class Promotion(models.Model):
     
     # Rasm
     image = ProcessedImageField(
-        upload_to='promotions/',
+        upload_to=promotion_upload_path,
         processors=[ResizeToFit(1600, 800)],
         format='WEBP',
         options={'quality': 80},
@@ -376,7 +383,7 @@ class SiteSettings(models.Model):
     site_name_ru = models.CharField(max_length=200, default="Пицца Центр Гарден")
     
     logo = ProcessedImageField(
-        upload_to='site/',
+        upload_to=site_settings_upload_path,
         processors=[ResizeToFit(400, 400)],
         format='WEBP',
         options={'quality': 90},
@@ -384,7 +391,7 @@ class SiteSettings(models.Model):
         null=True,
         help_text="Site logo image"
     )
-    favicon = models.ImageField(upload_to='site/', blank=True, null=True, help_text="Site favicon")
+    favicon = models.ImageField(upload_to=site_settings_upload_path, blank=True, null=True, help_text="Site favicon")
     
     # Contact Information
     phone = models.CharField(max_length=20, default="+998 91 433 11 10", help_text="Bron uchun telefon raqami")
@@ -675,7 +682,7 @@ class RestaurantInfo(models.Model):
     
     # Restaurant Images
     hero_image = ProcessedImageField(
-        upload_to='restaurant/',
+        upload_to=restaurant_info_upload_path,
         processors=[ResizeToFit(1920, 1080)],
         format='WEBP',
         options={'quality': 80},
@@ -683,7 +690,7 @@ class RestaurantInfo(models.Model):
         null=True
     )
     about_image = ProcessedImageField(
-        upload_to='restaurant/',
+        upload_to=restaurant_info_upload_path,
         processors=[ResizeToFit(1200, 800)],
         format='WEBP',
         options={'quality': 80},
