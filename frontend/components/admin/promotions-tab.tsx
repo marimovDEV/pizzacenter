@@ -227,10 +227,10 @@ export function PromotionsTab() {
       if (editingPromotion) {
         const promotionId = editingPromotion.id
         await api.patchFormData(`/promotions/${promotionId}/`, formDataToSend)
-        toast.success("Aksiya muvaffaqiyatli yangilandi")
+        toast.success("Muvaffaqiyatli yangilandi")
       } else {
         await api.postFormData('/promotions/', formDataToSend)
-        toast.success("Yangi aksiya muvaffaqiyatli qo'shildi")
+        toast.success("Muvaffaqiyatli qo'shildi")
       }
 
       await refetchPromotions()
@@ -316,7 +316,7 @@ export function PromotionsTab() {
         setPromotionToDelete(null)
         await refetchPromotions()
 
-        toast.success("Aksiya o'chirildi")
+        toast.success("O'chirildi")
       } catch (error) {
         console.error('Error deleting promotion:', error)
         toast.error("O'chirishda xatolik yuz berdi")
@@ -375,7 +375,7 @@ export function PromotionsTab() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-white">Aksiyalar</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-white">Yangi mahsulotlar</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
@@ -383,7 +383,7 @@ export function PromotionsTab() {
               className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-full text-sm sm:text-base shadow-lg hover:shadow-emerald-500/20 transition-all"
             >
               <Plus className="w-5 h-5 mr-2" />
-              <span className="hidden sm:inline">Yangi Aksiya</span>
+              <span className="hidden sm:inline">Yangi mahsulot qo'shish</span>
               <span className="sm:hidden">Qo'shish</span>
             </Button>
           </DialogTrigger>
@@ -391,7 +391,7 @@ export function PromotionsTab() {
             <DialogHeader className="p-6 pb-2 border-b border-white/10 bg-slate-900/50 backdrop-blur sticky top-0 z-10">
               <DialogTitle className="text-xl font-bold flex items-center gap-2">
                 {editingPromotion ? <Pencil className="w-5 h-5 text-emerald-500" /> : <Plus className="w-5 h-5 text-emerald-500" />}
-                {editingPromotion ? "Aksiyani tahrirlash" : "Yangi aksiya yaratish"}
+                {editingPromotion ? "Tahrirlash" : "Yangi mahsulot qo'shish"}
               </DialogTitle>
               <DialogDescription className="text-white/60">
                 Quyidagi formani to'ldirish orqali {editingPromotion ? "aksiyani yangilang" : "yangi aksiya yarating"}.
@@ -521,7 +521,7 @@ export function PromotionsTab() {
                       {/* Final Price */}
                       <div className="space-y-2 pt-2 border-t border-white/5">
                         <Label className="text-sm text-white font-medium">
-                          Aksiya Narxi (Yakuniy) <span className="text-red-400">*</span>
+                          Narxi (Yakuniy) <span className="text-red-400">*</span>
                         </Label>
                         <Input
                           type="number"
@@ -774,7 +774,7 @@ export function PromotionsTab() {
           </div>
         ) : promotions.length === 0 ? (
           <div className="col-span-full text-center py-8">
-            <p className="text-white/60">Hozircha aksiyalar yo'q</p>
+            <p className="text-white/60">Hozircha yangi mahsulotlar yo'q</p>
           </div>
         ) : (
           promotions.map((promotion) => (
@@ -844,7 +844,7 @@ export function PromotionsTab() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent className="bg-slate-800 border-slate-700 text-white max-w-md mx-4">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-white text-lg">Aksiyani o'chirish</AlertDialogTitle>
+            <AlertDialogTitle className="text-white text-lg">O'chirishni tasdiqlaysizmi?</AlertDialogTitle>
             <AlertDialogDescription className="text-gray-300">
               Siz haqiqatan ham <strong>"{promotionToDelete?.title_uz}"</strong> aksiyasini o'chirishni xohlaysizmi?
               <br />

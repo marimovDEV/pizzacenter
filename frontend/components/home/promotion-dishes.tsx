@@ -10,18 +10,18 @@ import { ArrowRight, Loader2, Sparkles } from "lucide-react"
 
 const translations = {
     uz: {
-        title: "Aksiyadagi taomlar",
-        subtitle: "Hozirgi qulay narxdagi va maxsus takliflarimiz",
+        title: "Yangi mahsulotlar",
+        subtitle: "Bizning eng so'nggi va mazali yangiliklarimiz",
         viewAll: "Barchasini ko'rish",
     },
     ru: {
-        title: "Блюда по акции",
-        subtitle: "Наши текущие специальные предложения и скидки",
+        title: "Новинки",
+        subtitle: "Наши самые последние и вкусные новинки",
         viewAll: "Посмотреть все",
     },
     en: {
-        title: "Dishes on Promotion",
-        subtitle: "Our current special offers and discounted items",
+        title: "New Arrivals",
+        subtitle: "Our latest and most delicious new items",
         viewAll: "View All",
     },
 }
@@ -49,7 +49,7 @@ export function PromotionDishesSection() {
             const promo = activePromos.find(p => p.linked_dish === item.id)
             return {
                 item,
-                discountBadge: promo?.discount_display || (promo?.discount_percentage ? `-${promo.discount_percentage}%` : "AKSIYA"),
+                discountBadge: promo?.discount_display || (promo?.discount_percentage ? `-${promo.discount_percentage}%` : "YANGI"),
                 discountPrice: promo?.discounted_price || promo?.price
             }
         })

@@ -22,7 +22,7 @@ export default function Home() {
 
       <TrustSection />
 
-      {/* 1. Aksiyadagi taomlar */}
+      {/* 1. Yangi mahsulotlar */}
       <PromotionDishesSection />
 
       {/* 2. Tavsiya etiladi */}

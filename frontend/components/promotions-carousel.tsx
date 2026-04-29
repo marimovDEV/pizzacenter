@@ -136,9 +136,9 @@ export function PromotionsCarousel({ language }: PromotionsCarouselProps) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-            {/* AKSIYA Badge */}
-            <div className="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-              AKSIYA
+            {/* YANGI Badge */}
+            <div className="absolute top-4 right-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+              YANGI
             </div>
 
             {((currentPromotion.discount_percentage ?? 0) > 0 || (currentPromotion.discount_amount ?? 0) > 0) && (

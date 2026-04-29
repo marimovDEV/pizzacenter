@@ -91,7 +91,7 @@ function AdminPanelContent() {
                   }`}
               >
                 <Megaphone className="w-4 h-4" />
-                <span className="text-sm font-medium">Aksiyalar</span>
+                <span className="text-sm font-medium">Yangi mahsulotlar</span>
               </button>
             </div>
           </div>

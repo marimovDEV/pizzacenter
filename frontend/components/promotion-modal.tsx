@@ -56,7 +56,7 @@ export function PromotionModal({ promotion, isOpen, onClose, language }: Promoti
     } else if (promotion.discount_type === 'bonus') {
       return getBonusInfo() || "Bonus"
     } else {
-      return "Aksiya"
+      return "Yangi"
     }
   }
 
@@ -135,7 +135,7 @@ export function PromotionModal({ promotion, isOpen, onClose, language }: Promoti
             <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-4 border border-white/20">
               <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
                 <Tag className="w-5 h-5 text-emerald-400" />
-                {language === "uz" ? "Aksiya Ma'lumotlari" : language === "ru" ? "Информация об акции" : "Promotion Info"}
+                {language === "uz" ? "Mahsulot Ma'lumotlari" : language === "ru" ? "Информация о продукте" : "Product Info"}
               </h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
