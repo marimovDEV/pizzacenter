@@ -6,7 +6,7 @@ import { X, Plus, Minus, ShoppingCart, Star, Clock, Weight, Tag } from "lucide-r
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/lib/cart-context"
 import type { Promotion, Language } from "@/lib/types"
-import { formatPrice } from "@/lib/api"
+import { formatPrice, getImageUrl } from "@/lib/api"
 
 interface PromotionModalProps {
   promotion: Promotion | null
